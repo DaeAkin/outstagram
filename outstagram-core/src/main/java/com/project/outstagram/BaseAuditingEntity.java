@@ -1,4 +1,4 @@
-package com.project.outstaram;
+package com.project.outstagram;
 
 import lombok.Getter;
 import lombok.Setter;

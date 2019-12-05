@@ -1,40 +1,129 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
 plugins {
-	id 'org.springframework.boot' version '2.0.5.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.0.5.RELEASE'
+    id 'java'
 }
 
-group = 'com.project'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+apply plugin: 'io.spring.dependency-management'
 
-repositories {
-	mavenCentral()
-	//If you are using a SNAPSHOT version
-//	maven { url 'https://repo.spring.io/snapshot' }
-	//If you are using a milestone or release candidate version
-	//현재는 SNAPSHOT 버전이기 때문에 필요 없습니다.
-	maven { url 'https://repo.spring.io/milestone' }
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation('org.springframework.boot:spring-boot-starter-security')
-	compile 'org.springframework.cloud:spring-cloud-security:2.0.0.M3'
-
-	compile('com.auth0:java-jwt:3.1.0')
-	runtimeOnly('org.springframework.boot:spring-boot-devtools')
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
-	compileOnly('org.projectlombok:lombok:1.18.4')
-	testCompileOnly('org.projectlombok:lombok:1.18.4')
-	annotationProcessor 'org.projectlombok:lombok:1.18.8'
-
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-
+ext {
+    set('springCloudVersion', "Greenwich.SR2")
 }
+
+
+allprojects {
+    group = 'com.project'
+    version = '0.0.1'
+    sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.spring.io/milestone' }
+
+
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+        implementation('org.springframework.boot:spring-boot-starter-web')
+//        runtime group: 'com.netflix.ribbon', name: 'ribbon', version: '2.7.10'
+        runtimeOnly('org.springframework.boot:spring-boot-devtools')
+        implementation 'org.springframework.boot:spring-boot-starter-mail'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-server
+        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-server', version: '2.0.4.RELEASE'
+        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-zuul
+        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
+
+        compileOnly 'org.projectlombok:lombok'
+        runtimeOnly 'mysql:mysql-connector-java'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        //common
+        implementation 'org.apache.commons:commons-lang3:3.8.1'
+        implementation 'com.github.darrachequesne:spring-data-jpa-datatables:5.0.0'
+        // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+//        implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+
+        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-config-server
+        //configSerevr
+        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version: '2.0.4.RELEASE'
+        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-client', version: '2.0.4.RELEASE'
+//        compile('org.springframework.cloud:spring-cloud-starter-parent')
+//        implementation('org.springframework.cloud:spring-cloud-starter-parent')
+        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-parent
+        // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.0.5.RELEASE'
+
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+        //
+
+        testImplementation 'io.projectreactor:reactor-test'
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
+    }
+}
+
+project(':outstagram-config-server') {
+    dependencies {
+        implementation('org.springframework.boot:spring-boot-starter-webflux')
+
+    }
+}
+
+
+project(':outstagram-core') {
+    dependencies {
+        implementation('org.springframework.boot:spring-boot-starter-security')
+
+
+    }
+}
+
+project(':outstagram-login') {
+    dependencies {
+        compile project(':outstagram-core')
+    }
+}
+
+project(':outstagram-discovery') {
+}
+
+project(':outstagram-zuul') {
+}
+
+
 

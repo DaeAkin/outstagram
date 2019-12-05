@@ -1,4 +1,4 @@
-package com.project.outstaram.controller;
+package com.project.outstagram.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
