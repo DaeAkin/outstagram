@@ -1,0 +1,40 @@
+plugins {
+	id 'org.springframework.boot' version '2.0.5.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.project'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+	//If you are using a SNAPSHOT version
+//	maven { url 'https://repo.spring.io/snapshot' }
+	//If you are using a milestone or release candidate version
+	//현재는 SNAPSHOT 버전이기 때문에 필요 없습니다.
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation('org.springframework.boot:spring-boot-starter-security')
+	compile 'org.springframework.cloud:spring-cloud-security:2.0.0.M3'
+
+	compile('com.auth0:java-jwt:3.1.0')
+	runtimeOnly('org.springframework.boot:spring-boot-devtools')
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	compileOnly('org.projectlombok:lombok:1.18.4')
+	testCompileOnly('org.projectlombok:lombok:1.18.4')
+	annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+
+}
+
