@@ -1,16 +1,6 @@
-plugins {
-    id 'java'
+dependencies{
+
 }
 
-group 'com.project'
-version '0.0.1-SNAPSHOT'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
+bootJar{enabled=false}
+jar{enabled=true}
