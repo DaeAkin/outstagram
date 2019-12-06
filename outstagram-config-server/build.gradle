@@ -13,4 +13,5 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version: '2.0.4.RELEASE'
 }

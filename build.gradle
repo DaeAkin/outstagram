@@ -51,14 +51,15 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'
         implementation('org.springframework.boot:spring-boot-starter-web')
+        implementation('org.springframework.boot:spring-boot-starter-actuator')
 //        runtime group: 'com.netflix.ribbon', name: 'ribbon', version: '2.7.10'
         runtimeOnly('org.springframework.boot:spring-boot-devtools')
         implementation 'org.springframework.boot:spring-boot-starter-mail'
-        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+//        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-server
-        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-server', version: '2.0.4.RELEASE'
+//        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-server', version: '2.0.4.RELEASE'
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-zuul
-        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
+//        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
 
         compileOnly 'org.projectlombok:lombok'
         runtimeOnly 'mysql:mysql-connector-java'
@@ -72,7 +73,8 @@ subprojects {
 
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-config-server
         //configSerevr
-        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version: '2.0.4.RELEASE'
+
+
         compile group: 'org.springframework.cloud', name: 'spring-cloud-config-client', version: '2.0.4.RELEASE'
 //        compile('org.springframework.cloud:spring-cloud-starter-parent')
 //        implementation('org.springframework.cloud:spring-cloud-starter-parent')
@@ -114,9 +116,9 @@ project(':outstagram-core') {
 }
 
 project(':outstagram-login') {
-    dependencies {
-        compile project(':outstagram-core')
-    }
+//    dependencies {
+//        compile project(':outstagram-core')
+//    }
 }
 
 project(':outstagram-discovery') {

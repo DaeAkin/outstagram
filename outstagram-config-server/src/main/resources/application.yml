@@ -1,0 +1,14 @@
+server:
+  port: 12222
+spring:
+  cloud:
+    config:
+      server:
+        encrypt:
+          enabled: false
+        git:
+          uri: https://github.com/DaeAkin/outstagram-config-repo
+          search-paths: outstagram-login
+
+
+
