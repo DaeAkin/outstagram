@@ -48,8 +48,8 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+//        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
         implementation('org.springframework.boot:spring-boot-starter-web')
         implementation('org.springframework.boot:spring-boot-starter-actuator')
 //        runtime group: 'com.netflix.ribbon', name: 'ribbon', version: '2.7.10'
@@ -75,7 +75,7 @@ subprojects {
         //configSerevr
 
 
-        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-client', version: '2.0.4.RELEASE'
+//        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-client', version: '2.0.4.RELEASE'
 //        compile('org.springframework.cloud:spring-cloud-starter-parent')
 //        implementation('org.springframework.cloud:spring-cloud-starter-parent')
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-parent

@@ -1,0 +1,12 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761
+#    유레카 서비스에 (자신을) 등록하지 않는다.
+    register-with-eureka: false
+#    레지스트리 정보를 로컬에 캐싱하지 않는다.
+    fetch-registry: false
+  server:
+    # 서버가 요청을 받기 전 대기할 초기 시간
+    # 운영 서버일때는 주석처리해야한다. 그래야 바로 서비스로 인식한다.
+#    wait-time-in-ms-when-sync-empty: 5

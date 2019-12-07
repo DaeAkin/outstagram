@@ -4,8 +4,9 @@ spring:
   profiles:
     active:
       default
-  cloud:
-    config:
-      uri: http://localhost:12222
+# config-server
+#  cloud:
+#    config:
+#      uri: http://localhost:12222
 
 
