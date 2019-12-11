@@ -15,4 +15,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // eureka 패키지 안에 ribbon이 포함되어있음.
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.4.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.0.4.RELEASE'
+
+
+
 }
