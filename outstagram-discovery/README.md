@@ -148,3 +148,48 @@ eureka 라이브러리 안에 ribbon이 포함되어있음.
 
 히스트릭스와 스프링 클라우드는 @HystrixCommand 어노테이션을 사용해 히스트릭스 회로 차단기가 관리하는 자바 클래스 메소드라고 표시한다. 스프링 프레임워크가 @HystrixCommand를 만나면 메소드를 감싸는 프록시를 동적으로 생성하고 원격 호출을 처기하기 위해 확보한 스레드가 있는 스레드 풀로 해당 메소드에 대한 모든 호출을 관리한다.
 
+
+
+
+
+## trouble shooting
+
+### 디스크버리 서버에서 로그 오류들이 막 나올때
+
+```
+019-12-14 16:58:01.012 ERROR 70437 --- [get_localhost-0] c.n.e.cluster.ReplicationTaskProcessor   : Batch update failure with HTTP status code 404; discarding 1 replication tasks
+2019-12-14 16:58:01.012  WARN 70437 --- [get_localhost-0] c.n.eureka.util.batcher.TaskExecutors    : Discarding 1 tasks of TaskBatchingWorker-target_localhost-0 due to permanent error
+2019-12-14 16:58:01.867 ERROR 70437 --- [get_localhost-0] c.n.e.cluster.ReplicationTaskProcessor   : Batch update failure with HTTP status code 404; discarding 1 replication tasks
+2019-12-14 16:58:01.867  WARN 70437 --- [get_localhost-0] c.n.eureka.util.batcher.TaskExecutors    : Discarding 1 tasks of TaskBatchingWorker-target_localhost-0 due to permanent error
+2019-12-14 16:58:02.873 ERROR 70437 --- [get_localhost-0] c.n.e.cluster.ReplicationTaskProcessor   : Batch update failure with HTTP status code 404; discarding 1 replication tasks
+2019-12-14 16:58:02.873  WARN 70437 --- [get_localhost-0] c.n.eureka.util.batcher.TaskExecutors    : Discarding 1 tasks of TaskBatchingWorker-target_localhost-0 due to permanent error
+2019-12-14 16:58:03.890 ERROR 70437 --- [get_localhost-3] c.n.e.cluster.ReplicationTaskProcessor   : Batch update failure with HTTP status code 404; discarding 1 replication tasks
+2019-12-14 16:58:03.890  WARN 70437 --- [get_localhost-3] c.n.eureka.util.batcher.TaskExecutors    : Discarding 1 tasks of TaskBatchingWorker-target_localhost-3 due to permanent error
+```
+
+유레카서버에서 서비스들이 정상적으로 등록되지만 이런 오류들이 나올때는
+
+```yaml
+eureka:
+  instance:
+#    이거써줘야 오류가 안나네 https://github.com/spring-cloud/spring-cloud-netflix/issues/291
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761
+#    유레카 서비스에 (자신을) 등록하지 않는다.
+    register-with-eureka: false
+#    레지스트리 정보를 로컬에 캐싱하지 않는다.
+    fetch-registry: false
+  server:
+    # 서버가 요청을 받기 전 대기할 초기 시간
+    # 운영 서버일때는 주석처리해야한다. 그래야 바로 서비스로 인식한다.
+#    wait-time-in-ms-when-sync-empty: 5
+
+```
+
+
+
+hostname을 설정해줘야 한다. 맥이나 리눅스에서 해줘야한다고 한다.
+
+[https://github.com/spring-cloud/spring-cloud-netflix/issues/291](https://github.com/spring-cloud/spring-cloud-netflix/issues/291)

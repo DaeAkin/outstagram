@@ -109,7 +109,7 @@ project(':outstagram-config-server') {
 
 project(':outstagram-core') {
     dependencies {
-        implementation('org.springframework.boot:spring-boot-starter-security')
+//        implementation('org.springframework.boot:spring-boot-starter-security')
 
 
     }

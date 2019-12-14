@@ -1,8 +1,6 @@
-
-
-#ribbon:
-#  eureka:
-#    enabled: true
+ribbon:
+  eureka:
+    enabled: true
 eureka:
   instance:
     lease-renewal-interval-in-seconds: 1

@@ -1,4 +1,7 @@
 eureka:
+  instance:
+#    이거써줘야 오류가 안나네 https://github.com/spring-cloud/spring-cloud-netflix/issues/291
+    hostname: localhost
   client:
     service-url:
       defaultZone: http://localhost:8761
@@ -10,3 +13,5 @@ eureka:
     # 서버가 요청을 받기 전 대기할 초기 시간
     # 운영 서버일때는 주석처리해야한다. 그래야 바로 서비스로 인식한다.
 #    wait-time-in-ms-when-sync-empty: 5
+
+
