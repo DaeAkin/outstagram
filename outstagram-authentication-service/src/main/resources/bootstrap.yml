@@ -1,6 +1,6 @@
 spring:
   application:
-    name: outstagram-login
+    name: outstagram-authentication-service
   profiles:
     active:
       default
@@ -8,4 +8,5 @@ spring:
 #  cloud:
 #    config:
 #      uri: http://localhost:12222
+
 

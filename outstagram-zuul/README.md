@@ -482,9 +482,120 @@ public class OutstagramZuulServerApplication {
 
 
 
-사후 필터를 사용해 서비스 호출자에게 다시 전달될 HTTP 응답 헤더에 상관관계 ID를 삽입해줄 수 있따 
+사후 필터를 사용해 서비스 호출자에게 다시 전달될 HTTP 응답 헤더에 상관관계 ID를 삽입해줄 수 있다.
+
+```java
+@Component
+public class ResponseFilter extends ZuulFilter{
+    private static final int  FILTER_ORDER=1;
+    private static final boolean  SHOULD_FILTER=true;
+    private static final Logger logger = LoggerFactory.getLogger(ResponseFilter.class);
+
+    @Autowired
+    FilterUtils filterUtils;
+
+    @Override
+    public String filterType() {
+        //사후 필터를 만들려면 필터 타입을 POST_FILTER_TYPE으로 설정한다.
+        return FilterUtils.POST_FILTER_TYPE;
+    }
+
+    @Override
+    public int filterOrder() {
+        return FILTER_ORDER;
+    }
+
+    @Override
+    public boolean shouldFilter() {
+        return SHOULD_FILTER;
+    }
+
+    @Override
+    public Object run() {
+        RequestContext ctx = RequestContext.getCurrentContext();
+
+        logger.debug("Adding the correlation id to the outbound headers. {}", filterUtils.getCorrelationId());
+        //원래 HTTP 요청에서 전달된 상관관계 ID를 가져와 응답에 삽입한다.
+        ctx.getResponse().addHeader(FilterUtils.CORRELATION_ID, filterUtils.getCorrelationId());
+
+        //처음부터 끝까지 주울에 들어오고 나가는 요청 항목을 보여주기 위해 나가는 요청 URI를 기록하낟.
+        logger.debug("Completing outgoing request for {}.", ctx.getRequest().getRequestURI());
+
+        return null;
+    }
+}
+```
+
+서비스 호출을하면 응답으로 header에 txd 헤더가 찍힘
 
 
+
+## 동적 경로 필터 작성
+
+사용자 정의 경로 필터가 없다면, 앞부분에서 본것 처럼 매핑 정의를 기반으로 모든 라우팅을 수행한다.
+하지만 주울 경로 필터를 작성하면 서비스 클라이언트의 호출을 라우팅하는 방식에 지능을 더 할 수 있다.
+
+
+
+A/B 테스트 하는 얘기 일정 비율만 신기능을 쓰게끔 유도할 수 있음.
+
+(추후에 공부해야겠다. 좀 복잡한듯)
+
+
+
+## OAuth2 토근 전파
+
+기본적으로 주울은 Cookie와 Set-Cookie, Authorization 같은 민감한 HTTP 헤더를 하위 서비스에 전달하지 않는다. 주울에서 'Authorization' HTTP 헤더를 전파하게 하려면 주울 서비스 게이트웨이의 application.yml 파일이나 스프링 클라우드. 컨피그 데이터 저장소에서 다음 구성 정볼르 설정해야 한다. 
+
+```yaml
+zuul.sensitiveHeaders : Cookie,Set-Cookie
+```
+
+이 구성 정보는 주울이 하위 서비스에 전파하지 않는 민감한 헤더의 차단 목록이다. 이 목록에 Authorization 값이 없다면 주울이 전파를 허용한다는 의미다. zuul.sensitiveHeaders를 아예 설정하지 않는다면 주울은 자동으로 세 가지 값(Cookie와 Set-Cookie,Authorization) 모두 전파하지 않는다.
+
+> 주울의 다른 OAuth2 기능은?
+>
+> 주울은 @EnableAuth2SSO 어노테이션을 사용해 자동으로 OAuth2 액세스 토큰을 하위로 전파하고 OAuth2 서비스 요청을 인가할 수 있다. 
+
+
+
+두번째로는 리소스를 보호하는 `ResourceServerConfigurerAdapter` 구현체를 작성하는 것
+
+세번째로는 HTTP Authorization 헤더가 마이크로서비스 호출에 주입됐는지 확인해야 한다.
+스프링 시큐리티가 없다면 HTTP 헤더를 가져오는 서블릿 필터를 작성하고 마이크로서비스들에서 나가는 모든 호출에 이 헤더를 직접 추가해야 한다. 스프링 OAuth2는 OAuth2 호출을 지원하는 새로운 RestTemplate 클래스인 OAuth2RestTemplate을 제공한다. OAuth2RestTemplate 클래스를 사용하려면 먼저 다른 OAuth2 보호 서비스를 호출하는 서비스에 자동 연결 될 수 있는 빈으로 노출 해야한다. 
+
+### 보호되는 마이크로서비스 자원에 밑에 코드 넣기
+
+```java
+@Bean
+public OAuth2RestTemplate restTemplate(UserInfoRestTemplateFactory factory) {
+    return factory.getUserInfoRestTemplate();
+}
+```
+
+
+
+```java
+@Component
+public class OrganizationRestTemplateClient {
+    @Autowired
+    OAuth2RestTemplate restTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(OrganizationRestTemplateClient.class);
+
+    public Organization getOrganization(String organizationId){
+        logger.debug("In Licensing Service.getOrganization: {}", UserContext.getCorrelationId());
+
+        ResponseEntity<Organization> restExchange =
+                restTemplate.exchange(
+                        "http://zuulserver:5555/api/organization/v1/organizations/{organizationId}",
+                        HttpMethod.GET,
+                        null, Organization.class, organizationId);
+
+        return restExchange.getBody();
+    }
+}
+```
 
 
 

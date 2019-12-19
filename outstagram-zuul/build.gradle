@@ -15,4 +15,15 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.4.RELEASE'
+
+    //oauth2 증명 방식을 사용하려면
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-security', version: '2.1.3.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.1.7.RELEASE'
+
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
+
+
 }

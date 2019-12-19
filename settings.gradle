@@ -7,4 +7,5 @@ include 'outstagram-login'
 include 'outstagram-core'
 include 'outstagram-discovery'
 include 'outstagram-config-server'
+include 'outstagram-authentication-service'
 

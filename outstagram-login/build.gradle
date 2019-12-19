@@ -17,6 +17,26 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.4.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.0.4.RELEASE'
 
+    //oauth2 증명 방식을 사용하려면
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-security', version: '2.1.3.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.1.7.RELEASE'
 
+
+    // https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.7.RELEASE'
+
+    // 이거 넣어야 yml 파일 userInfoUrl 됨..
+    // https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.1.3.RELEASE'
+
+    //jwt
+    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-stream' ,  version: '2.1.0.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-kafka
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version: '2.1.2.RELEASE'
 
 }
