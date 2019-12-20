@@ -6,6 +6,14 @@ public class LoginChangeModel {
     private String action;
     private String correlationId;
 
+
+    public LoginChangeModel(String type, String action, String correlationId) {
+        super();
+        this.type = type;
+        this.action = action;
+        this.correlationId = correlationId;
+    }
+
     public String getType() {
         return type;
     }

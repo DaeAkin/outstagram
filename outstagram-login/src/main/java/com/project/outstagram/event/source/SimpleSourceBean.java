@@ -1,10 +1,12 @@
-package com.project.outstagram.event;
+package com.project.outstagram.event.source;
 
-import com.netflix.discovery.converters.Auto;
+import com.project.outstagram.event.models.LoginChangeModel;
+import com.project.outstagram.utils.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,6 +24,20 @@ public class SimpleSourceBean {
 
     public void publishLoginChange(String action, String someId) {
         logger.debug("Sending Kafka message {} for ");
+        LoginChangeModel change = new LoginChangeModel(
+                LoginChangeModel.class.getTypeName(),
+                action,
+                "UserContext.ge"
+        );
+
+        source
+                .output()
+                .send(
+                        MessageBuilder
+                        .withPayload(change)
+                        .build()
+                );
+
     }
 
 

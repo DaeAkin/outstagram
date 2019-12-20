@@ -17,7 +17,20 @@ eureka:
 
 server:
   port: 13333
+
 spring:
+  cloud:
+    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
+    stream:
+      bindings:
+        output:
+          destination: loginChangeTopic
+          contentType: application/json
+      kafka:
+        binder:
+          zk-nodes: localhost
+          brokers: localhost
+
   profiles: default
   servlet:
     multipart:

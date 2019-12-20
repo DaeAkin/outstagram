@@ -1,6 +1,7 @@
 spring:
   application:
     name: outstagram-login
+
   profiles:
     active:
       default
