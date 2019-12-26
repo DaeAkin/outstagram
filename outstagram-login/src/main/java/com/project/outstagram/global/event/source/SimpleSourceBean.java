@@ -8,7 +8,7 @@ import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class SimpleSourceBean {
     // 발행자, 메세지를 내보내는 것임
     private Source source;

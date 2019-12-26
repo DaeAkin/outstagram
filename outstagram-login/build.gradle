@@ -39,4 +39,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-kafka
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version: '2.1.2.RELEASE'
 
+    //db
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    runtimeOnly('mysql:mysql-connector-java')
+
 }

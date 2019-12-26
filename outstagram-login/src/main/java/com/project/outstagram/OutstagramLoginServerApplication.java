@@ -16,6 +16,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
@@ -24,13 +26,14 @@ import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@EnableJpaAuditing
+@EnableJpaRepositories
 @RefreshScope
 @EnableEurekaClient
 @EnableCircuitBreaker
 @EnableResourceServer
 // 스프링 클라우드 스트림에 애플리케이션을 메세지 브로커로 바인딩하라고 알린다.
-@EnableBinding(Source.class)
+//@EnableBinding(Source.class)
 public class OutstagramLoginServerApplication {
 
 

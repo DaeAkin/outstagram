@@ -1,4 +1,4 @@
-package com.project.outstagram.domain.member.domain;
+package com.project.outstagram.domain.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.outstagram.global.domain.BaseAuditingEntity;
