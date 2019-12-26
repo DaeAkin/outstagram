@@ -26,4 +26,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
 
+
+    //user접근을 위한 db연결들
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    runtimeOnly('mysql:mysql-connector-java')
+
+
 }

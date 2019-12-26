@@ -24,7 +24,7 @@ configurations {
 }
 
 ext {
-    set('springCloudVersion', "Greenwich.SR2")
+    set('springCloudVersion', "Greenwich.RELEASE")
 }
 
 
@@ -61,9 +61,12 @@ subprojects {
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-zuul
 //        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
 
-        compileOnly 'org.projectlombok:lombok'
+        compileOnly('org.projectlombok:lombok:1.18.4')
+        testCompileOnly('org.projectlombok:lombok:1.18.4')
+        annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
         runtimeOnly 'mysql:mysql-connector-java'
-        annotationProcessor 'org.projectlombok:lombok'
+
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         //common
         implementation 'org.apache.commons:commons-lang3:3.8.1'
