@@ -110,19 +110,8 @@ project(':outstagram-config-server') {
     }
 }
 
-
-project(':outstagram-core') {
-    dependencies {
-//        implementation('org.springframework.boot:spring-boot-starter-security')
-
-
-    }
-}
-
 project(':outstagram-login') {
-//    dependencies {
-//        compile project(':outstagram-core')
-//    }
+
 }
 
 project(':outstagram-discovery') {

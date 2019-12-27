@@ -13,4 +13,9 @@ public class EmailAuthService {
     public void sendAuthEmail(Mono<String> email) {
 
     }
+
+    public Mono authEmail(Mono<String> token) {
+
+        return null;
+    }
 }
