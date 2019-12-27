@@ -1,6 +1,6 @@
 package com.project.outstagram.domain.member.utils;
 
-import com.project.outstagram.domain.member.dto.User;
+import com.project.outstagram.domain.member.domain.User;
 import com.project.outstagram.domain.member.dao.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,11 +1,12 @@
-package com.project.outstagram.domain.member.dto;
+package com.project.outstagram.domain.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.outstagram.global.domain.BaseAuditingEntity;
+import com.project.outstagram.BaseAuditingEntity;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,6 +40,16 @@ public class User extends BaseAuditingEntity implements UserDetails {
     private boolean acceptOptionalBenefitAlerts;
 
     private String fcmToken;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public void initialize(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
+        this.enabled = true;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
