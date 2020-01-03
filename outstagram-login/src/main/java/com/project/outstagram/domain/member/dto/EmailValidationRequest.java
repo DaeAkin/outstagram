@@ -5,6 +5,6 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 @Data
 public class EmailValidationRequest {
-    @NotBlank
+    @NotBlank(message = "email 형식이 올바르지 않습니다.")
     String email;
 }

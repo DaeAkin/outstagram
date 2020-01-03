@@ -13,8 +13,6 @@ import java.util.concurrent.Executors;
 @Configuration
 public class DataSourceConfig {
 
-    @Value("${spring.datasource.maximum-pool-size}")
-    private int connectionPoolSize;
 
     @Value("${spring.datasource.url}")
     private String datasourceUrl;
@@ -38,8 +36,4 @@ public class DataSourceConfig {
         return dataSource;
     }
 
-    @Bean
-    public Scheduler jdbcScheduler() {
-        return Schedulers.fromExecutor(Executors.newFixedThreadPool(connectionPoolSize));
-    }
 }

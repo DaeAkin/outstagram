@@ -1,20 +1,19 @@
 package com.project.outstagram.domain.member.application;
 
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.project.outstagram.domain.member.dao.UserRepository;
 import com.project.outstagram.domain.member.domain.User;
+import com.project.outstagram.domain.member.dto.EmailValidationResponse;
 import com.project.outstagram.domain.member.dto.UserJoinRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
-
-import java.util.Optional;
 
 /**
  * Spring-jdbc는 기본적으로 blocking 이기 때문에,
@@ -24,44 +23,71 @@ import java.util.Optional;
  * Conumser가 느린경우 -> ex) get,find.. etc  -> subscribeOn으로 스레드 생성. 아무데서나 체인 엮어도 됨.
  * Publisher가 느린 경우 -> ex) save ... etc -> publishOn 밑에 있는 것들만 스레드 생성
  */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@DefaultProperties(
+        commandProperties = {
+                @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="1000"), // 1초 안에 응답안하면 실패처리
+                @HystrixProperty(name="circuitBreaker.requestVolumeThreshold", value="10"), //히스트릭스가 호출 차단을 고려하는 데 필요한 시간
+                @HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="75"), // 회로 차단기를 차단하고 나서 requestVolumeThreshold 값 만큼 호출한 후 타임아웃이나 예외 발생, HTTP500 반환등으로 실패해야 하는 호출 비율
+                @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds", value="7000"), // 차단되고 나서 히스트릭스가 서비스 회복 상태를 확인할 때 까지 대기할 시간 간격
+                @HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"), // 히스트릭스가 서비스 호출 문제를 모니터할 시간 간격을 설정하는데 사용 기본값은 1만 밀리초, 즉 10초
+                @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")})//설정한 시간 간격 동안 통계를 수집할 횟수를 설정 timeInMilliseconds와 나눴을 때 나머지가 0으로 균등하게 분할해야함. 15초 동안 5초길이로 하니까 3개의 통계 데이터가 나옴 .
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder userPasswordEncoder;
 
-    @Qualifier("jdbcScheduler")
-    private final Scheduler jdbcScheduler;
 
 
-    public Mono<Boolean> emailValidation(String email) {
-
-//        System.out.println(userRepository.findByEmail(email).toString());
-
+    public Mono<EmailValidationResponse> emailValidation(String email) {
         return  Mono
                 .defer(() -> Mono.just(userRepository.findByEmail(email)))
-//                .doOnNext(u -> System.out.println("mock Email :" +  u.getEmail()))
                 .subscribeOn(Schedulers.elastic())
-                .thenReturn(true)
-                .onErrorReturn(false);
-
-//        return Mono.just(true);
-
+                .thenReturn(new EmailValidationResponse(true))
+                .onErrorReturn(new EmailValidationResponse(false));
     }
 
-    public Mono<Boolean> joinUser(UserJoinRequest userJoinRequest) {
+    public Mono<Void> joinUser(UserJoinRequest userJoinRequest) {
         return Mono.just(userJoinRequest)
-                .publishOn(jdbcScheduler)
+                .publishOn(Schedulers.elastic())
                 .doOnNext( u -> {
                     User user = u.toEntity();
                     user.initialize(userPasswordEncoder);
                     userRepository.save(user);
                 })
-                .thenReturn(true).log();
-//                .defaultIfEmpty(false).log();
+                .then().log();
+
+
     }
+
+    @HystrixCommand(fallbackMethod = "getUserInfoFallback",
+            threadPoolKey = "whoamiThreadPool", // threadPool의 이름을 설정
+            threadPoolProperties =
+                    {@HystrixProperty(name = "coreSize",value="30"), //스레드 풀의 개수를 설정
+                            @HystrixProperty(name="maxQueueSize", value="10")})
+    public Mono<User> getUserInfo(Long id) {
+        sleep();
+        return Mono.
+                defer(() -> Mono.just(userRepository.findById(id).get()))
+                .subscribeOn(Schedulers.elastic());
+    }
+
+    private Mono<User> getUserInfoFallback(Long id) {
+        return Mono.just(new User("donghyeon"));
+    }
+
+    private void sleep() {
+        try {
+            System.out.println("sleep()");
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

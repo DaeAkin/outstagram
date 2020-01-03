@@ -1,29 +1,17 @@
 package com.project.outstagram.domain.member.application;
 
-import com.netflix.discovery.converters.Auto;
 import com.project.outstagram.domain.member.dao.UserRepository;
 import com.project.outstagram.domain.member.domain.User;
+import com.project.outstagram.domain.member.dto.EmailValidationResponse;
 import com.project.outstagram.domain.member.dto.UserJoinRequest;
 import com.project.outstagram.test.MockTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
 
-import java.util.concurrent.Executors;
-
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 
 public class UserServiceTest extends MockTest {
@@ -31,9 +19,6 @@ public class UserServiceTest extends MockTest {
     @InjectMocks
     UserService userService;
 
-
-
-    Scheduler scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(10));
     @Mock
     UserRepository userRepository;
     @Mock
@@ -48,7 +33,7 @@ public class UserServiceTest extends MockTest {
                 .willReturn(new User(email));
         //then
         StepVerifier.create(userService.emailValidation(email))
-                .expectNext(true)
+                .expectNext(new EmailValidationResponse(true))
                 .expectComplete()
                 .verify();
     }
@@ -60,27 +45,23 @@ public class UserServiceTest extends MockTest {
 
         //then
         StepVerifier.create(userService.emailValidation(email))
-                .expectNext(false)
+                .expectNext(new EmailValidationResponse(false))
                 .expectComplete()
                 .verify();
 
     }
 
-//    @Test
-//    public void 회원가입_테스트() {
-//        //given
-//        UserJoinRequest userJoinRequest = UserJoinRequest.builder()
-//                .email(email)
-//                .password("51231")
-//                .build();
-//        given(userRepository.save(userJoinRequest.toEntity())).
-//                willReturn(userJoinRequest.toEntity());
-//
-//        //when
-//        Mono<Boolean> result = userService.joinUser(userJoinRequest);
-//
-//        //then
-//        assertThat(result.block()).isEqualTo(true);
-//
-//    }
+    @Test
+    public void 회원가입_테스트() {
+        //given
+        UserJoinRequest userJoinRequest = UserJoinRequest.builder()
+                .email(email)
+                .password("51231")
+                .build();
+
+        //then
+        StepVerifier.create(userService.joinUser(userJoinRequest))
+                .expectComplete()
+                .verify();
+    }
 }

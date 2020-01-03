@@ -9,9 +9,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class UserJoinRequest {
-    @NotBlank
+    @NotBlank(message = "이메일을 다시 확인해주세요.")
     String email;
-    @NotBlank
+
+    @NotBlank(message = "비밀번호를 다시 확인해주세요.")
     String password;
 
     public User toEntity() {
