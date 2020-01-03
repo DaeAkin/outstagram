@@ -1,20 +1,14 @@
-package com.project.outstagram.global.config;
+package outstagram.global.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 import javax.sql.DataSource;
-import java.util.concurrent.Executors;
 
 @Configuration
 public class DataSourceConfig {
-
-    @Value("${spring.datasource.maximum-pool-size}")
-    private int connectionPoolSize;
 
     @Value("${spring.datasource.url}")
     private String datasourceUrl;
@@ -36,10 +30,5 @@ public class DataSourceConfig {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         return dataSource;
-    }
-
-    @Bean
-    public Scheduler jdbcScheduler() {
-        return Schedulers.fromExecutor(Executors.newFixedThreadPool(connectionPoolSize));
     }
 }

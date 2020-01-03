@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: outstagram-infra
+
+  profiles:
+    active:
+      default
+# config-server
+#  cloud:
+#    config:
+#      uri: http://localhost:12222
+

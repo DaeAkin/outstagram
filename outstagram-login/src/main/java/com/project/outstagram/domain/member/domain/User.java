@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -49,6 +50,11 @@ public class User extends BaseAuditingEntity implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return authorities;
+    }
+
+    public void initialize(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
+        this.enabled = true;
     }
 
     @Override

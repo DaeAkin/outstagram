@@ -2,6 +2,7 @@ package com.project.outstagram;
 
 
 import com.project.outstagram.global.utils.UserContextInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,9 +22,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -35,8 +39,6 @@ import java.util.List;
 // 스프링 클라우드 스트림에 애플리케이션을 메세지 브로커로 바인딩하라고 알린다.
 //@EnableBinding(Source.class)
 public class OutstagramLoginServerApplication {
-
-
 
     public static void main(String[] args) {
         SpringApplication.run(OutstagramLoginServerApplication.class, args);

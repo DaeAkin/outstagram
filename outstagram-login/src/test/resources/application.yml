@@ -1,0 +1,69 @@
+ribbon:
+  eureka:
+    enabled: true
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true #서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+
+server:
+  port: 13333
+
+signing :
+  #sha256(outstagram)
+  key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
+
+spring:
+  cloud:
+    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
+    stream:
+      bindings:
+        output:
+          destination: loginChangeTopic
+          contentType: application/json
+      kafka:
+        binder:
+          zk-nodes: localhost
+          brokers: localhost
+
+  profiles: default
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  #  main:
+  #    web-application-type: none # 웹 어플리케이션이면 이 프로퍼티를 써줘야한다.
+  thymeleaf:
+    cache: false
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/outstagram?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: outstagram
+    password: 1234
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8901/user

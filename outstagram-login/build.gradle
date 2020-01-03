@@ -43,6 +43,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     runtimeOnly('mysql:mysql-connector-java')
+    compile("com.h2database:h2")
 
     //bdd
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4') // Spock 의존성 추가
