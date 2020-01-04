@@ -19,5 +19,10 @@ management:
         include:
           - "*"
 zuul:
-  sensitiveHeaders: Cookie,Set-Cookie
+  sensitiveHeaders: Cookie,Set-Cookie # zuul은 기본적으로 예민한 Header 정보인 Cookie,Set-Cookie,authorization 정보를 전송하지않음.
+  # 위에 뜻은, Cookie,Set-Cookie만 전송 안한다는 뜻
+  prefix : /api
+  zuul.debug.request: true
+
+
 #위와 같이 엔드포인트를 노출시켜줘야 한다.
