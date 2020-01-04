@@ -29,7 +29,7 @@ import reactor.core.scheduler.Schedulers;
 @Slf4j
 @DefaultProperties(
         commandProperties = {
-                @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="1000"), // 1초 안에 응답안하면 실패처리
+                @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="700"), // 0.7초 안에 응답안하면 실패처리
                 @HystrixProperty(name="circuitBreaker.requestVolumeThreshold", value="10"), //히스트릭스가 호출 차단을 고려하는 데 필요한 시간
                 @HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="75"), // 회로 차단기를 차단하고 나서 requestVolumeThreshold 값 만큼 호출한 후 타임아웃이나 예외 발생, HTTP500 반환등으로 실패해야 하는 호출 비율
                 @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds", value="7000"), // 차단되고 나서 히스트릭스가 서비스 회복 상태를 확인할 때 까지 대기할 시간 간격
@@ -82,7 +82,7 @@ public class UserService {
     private void sleep() {
         try {
             System.out.println("sleep()");
-            Thread.sleep(3000);
+            Thread.sleep(800);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

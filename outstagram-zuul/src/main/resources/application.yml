@@ -18,5 +18,6 @@ management:
       exposure:
         include:
           - "*"
-
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
 #위와 같이 엔드포인트를 노출시켜줘야 한다.

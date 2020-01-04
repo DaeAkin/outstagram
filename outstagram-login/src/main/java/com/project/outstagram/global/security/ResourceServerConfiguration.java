@@ -15,6 +15,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/user/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/**").permitAll()
                 .anyRequest().access("#oauth2.hasScope('webclient')")
                 .anyRequest().access("#oauth2.hasScope('mobileclient')")
         ;

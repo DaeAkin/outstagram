@@ -1,5 +1,7 @@
 package com.project.outstagram.global.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -19,6 +21,7 @@ import java.io.IOException;
 
 //RestTemplate 전용 인터셉터
 public class UserContextInterceptor implements ClientHttpRequestInterceptor {
+    private static final Logger logger = LoggerFactory.getLogger(UserContextInterceptor.class);
     // RestTemplate으로 실제 HTTp 서비스 호출을 하기 전에 intercept() 메소드가 호출된다.
     @Override
     public ClientHttpResponse intercept(
@@ -29,6 +32,10 @@ public class UserContextInterceptor implements ClientHttpRequestInterceptor {
         headers.add(UserContext.CORRELATION_ID, UserContextHolder.getContext().getCorrelationId());
         //서비스 호출을 위해 준비할 HTTP 요청 헤더를 가져와 UserContext에 저장된 상관관계 ID를 추가한다.
         headers.add(UserContext.AUTH_TOKEN, UserContextHolder.getContext().getAuthToken());
+
+        logger.info(UserContext.CORRELATION_ID +":" + UserContextHolder.getContext().getCorrelationId() );
+        logger.info(UserContext.AUTH_TOKEN +":" + UserContextHolder.getContext().getAuthToken() );
+
 
         return execution.execute(request, body);
     }
