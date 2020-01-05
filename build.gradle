@@ -11,10 +11,12 @@ buildscript {
 }
 plugins {
     id 'org.springframework.boot' version '2.0.5.RELEASE'
+    id 'com.google.cloud.tools.jib' version '1.4.0'
     id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
+
 
 
 configurations {
@@ -33,6 +35,8 @@ allprojects {
     version = '0.0.1'
     sourceCompatibility = '1.8'
 
+    ext.dockerId = 'kei890'
+
     repositories {
         mavenCentral()
         maven { url 'https://jitpack.io' }
@@ -46,21 +50,15 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.google.cloud.tools.jib'
     apply plugin: 'groovy'
 
     dependencies {
-//        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
         implementation('org.springframework.boot:spring-boot-starter-web')
         implementation('org.springframework.boot:spring-boot-starter-actuator')
-//        runtime group: 'com.netflix.ribbon', name: 'ribbon', version: '2.7.10'
+
         runtimeOnly('org.springframework.boot:spring-boot-devtools')
         implementation 'org.springframework.boot:spring-boot-starter-mail'
-//        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-server
-//        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-server', version: '2.0.4.RELEASE'
-        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-zuul
-//        compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
 
         compileOnly('org.projectlombok:lombok:1.18.4')
         testCompileOnly('org.projectlombok:lombok:1.18.4')
@@ -72,25 +70,11 @@ subprojects {
         //common
         implementation 'org.apache.commons:commons-lang3:3.8.1'
 
-        // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-//        implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
-
-        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-config-server
-        //configSerevr
-
-
-//        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-client', version: '2.0.4.RELEASE'
-//        compile('org.springframework.cloud:spring-cloud-starter-parent')
-//        implementation('org.springframework.cloud:spring-cloud-starter-parent')
-        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-parent
-        // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.0.5.RELEASE'
 
         testCompile('org.springframework.boot:spring-boot-starter-test')
-        //
 
         testImplementation 'io.projectreactor:reactor-test'
-        // https://mvnrepository.com/artifact/io.projectreactor/reactor-core
         compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
     }
 }
@@ -104,23 +88,17 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
     }
 }
-
-project(':outstagram-config-server') {
-    dependencies {
-        implementation('org.springframework.boot:spring-boot-starter-webflux')
-
-    }
+//밑에다 둬야하네.. task는 ㄷㄷ..
+task dockerDownAll(type:Exec) {
+    commandLine './docker/common/docker-compose', 'down'
 }
 
-project(':outstagram-login') {
-
+task dockerRunAll(type:Exec) {
+    dependsOn dockerDownAll
+    dependsOn subprojects.jibDockerBuild
+    commandLine './docker/common/docker-compose', 'up', '-d'
 }
 
-project(':outstagram-discovery') {
-}
-
-project(':outstagram-zuul') {
-}
 
 
 

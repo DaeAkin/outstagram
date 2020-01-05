@@ -1,43 +1,90 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+    }
+}
 plugins {
+
     id 'java'
 }
+
+bootJar {
+    baseName = 'outstagram-login'
+    version =  '0.1.0'
+}
+
+jib {
+    to {
+        image = "${dockerId}/${bootJar.baseName}:${bootJar.version}"
+        tags = ['latest']
+    }
+}
+
+
+
+
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+
 
 group 'com.project'
 version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+
 repositories {
     mavenCentral()
+}
+
+dependencyManagement {
+
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
+    }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // eureka 패키지 안에 ribbon이 포함되어있음.
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.4.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.0.4.RELEASE'
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix'
 
     //oauth2 증명 방식을 사용하려면
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-security', version: '2.1.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-security'
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
-    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.1.7.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client'
 
 
     // https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.7.RELEASE'
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
 
     // 이거 넣어야 yml 파일 userInfoUrl 됨..
     // https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure
-    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.1.3.RELEASE'
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure'
 
     //jwt
-    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-jwt'
 
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-stream' ,  version: '2.1.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-stream'
 
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-kafka
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version: '2.1.2.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka'
 
     //db
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
@@ -48,5 +95,9 @@ dependencies {
     //bdd
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4') // Spock 의존성 추가
     testCompile('org.spockframework:spock-spring:1.1-groovy-2.4') // Spock 의존성 추가
+
+    //sleuth
+//    compile 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
+
 
 }

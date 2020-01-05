@@ -11,6 +11,17 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    baseName = 'service-1'
+    version =  '0.1.0'
+}
+
+jib {
+    to {
+        image = "${dockerId}/${bootJar.baseName}:${bootJar.version}"
+        tags = ['latest']
+    }
+}
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 

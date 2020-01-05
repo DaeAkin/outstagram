@@ -25,6 +25,8 @@ public class UserApi {
 
     @PostMapping("/email-validation")
     public Mono validationEmail(@RequestBody @Valid EmailValidationRequest emailValidationRequest) {
+        log.info("info");
+        log.debug("debug");
         return userService.emailValidation(emailValidationRequest.getEmail());
     }
 

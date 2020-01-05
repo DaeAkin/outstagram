@@ -63,6 +63,14 @@ spring:
     show-sql: true
 
 
+logging:
+  level:
+    com :
+      project :
+        outstagram : debug
+
+
+
 security:
   oauth2:
     resource:

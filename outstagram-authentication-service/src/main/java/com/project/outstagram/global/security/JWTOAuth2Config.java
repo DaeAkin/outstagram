@@ -48,7 +48,9 @@ public class JWTOAuth2Config extends AuthorizationServerConfigurerAdapter {
                 .withClient("outstagram")
                 .secret(userPasswordEncoder.encode("thisissecret"))
                 .authorizedGrantTypes("refresh_token", "password", "client_credentials")
-                .scopes("webclient", "mobileclient");
+                .scopes("webclient", "mobileclient")
+        .accessTokenValiditySeconds(-1);
+
     }
 
     @Override
