@@ -49,10 +49,17 @@ spring:
       enabled: true
     restart:
       enabled: true
+#으.. 망할 도커자식!!
+  #
+  #The ports mapping in your docker-compose.yml is only relevant for the host,
+   # so you'll be able to connect to your DB through localhost:3308.
+    #But inside your other docker-compose containers (that is, the compose default network),
+    #you'd have to use workaround-mysql:3306.
+    #https://stackoverflow.com/questions/56429995/spring-boot-docker-cannot-connect-to-mysql-connection-refused-createcommunica/56431451#56431451
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/outstagram?useSSL=false&useUnicode=true&characterEncoding=utf8
-    username: outstagram
+    url: jdbc:mysql://mysql:3306/outstagram?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: root
     password: 1234
   jpa:
     properties:

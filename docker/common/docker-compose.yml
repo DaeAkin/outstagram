@@ -1,17 +1,45 @@
 # docker-compose -f [docker-compose.yml] up
-version: '2'
+version: '3'
 services:
 #  eurekaserver:
 #    image:   johncarnell/tmx-eurekasvr:chapter9
 #    ports:
 #      - "8761:8761"
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    expose:
+      - 32000
+    networks:
+      - backend
+    environment:
+      MYSQL_DATABASE: outstagram
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_HOST: '%'
+
+    restart: always
+
   outstagram-login:
     image: outstagram-login:latest
     container_name : "outstagram-login"
+    links:
+      - mysql
+    expose:
+      - 13333
     ports:
       - "13333:13333"
+    networks:
+      - backend
+    depends_on:
+      - mysql
 
-#    environment:
+networks:
+  backend:
+
+
+  #    environment:
 #      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
 #      EUREKASERVER_PORT: "8761"
 #      ENCRYPT_KEY:       "IMSYMMETRIC"
