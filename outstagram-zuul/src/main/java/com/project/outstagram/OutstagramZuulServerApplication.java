@@ -1,6 +1,7 @@
 package com.project.outstagram;
 
 
+import brave.sampler.Sampler;
 import com.project.outstagram.global.utils.UserContextInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +25,11 @@ import java.util.List;
 public class OutstagramZuulServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(OutstagramZuulServerApplication.class, args);
+    }
+
+    @Bean
+    public Sampler defaultSampler() {
+        return Sampler.ALWAYS_SAMPLE;
     }
 
 

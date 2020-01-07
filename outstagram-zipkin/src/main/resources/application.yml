@@ -1,11 +1,5 @@
-#eureka:
-#  instance:
-#    prefer-ip-address: true #서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
-#  client:
-#    register-with-eureka: true #자기 자신은 서비스로 등록하지 않는다.
-#    fetch-registry: true #마이크로서비스인스턴스 목록을 로컬에 캐시할 것인지
-#    serviceUrl:
-#      defaultZone: http://127.0.0.1:8761/eureka/
+
 
 server:
   port: 9411
+

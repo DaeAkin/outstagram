@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-@Component
+//
+//@Component
 /**
  * 모든 주울 필터는 ZuulFilter 클래스를 확장하고 filterType()과 filterOrder(), shouldFilter(), run()등
  * 4개의 메서드를 재정의 해야한다.

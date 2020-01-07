@@ -1,9 +1,10 @@
 spring:
   application:
-    name: outstagram-zipkin
+    name: outstagram-test
   profiles:
     active:
       default
+
 
 
 

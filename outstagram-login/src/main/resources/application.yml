@@ -66,6 +66,7 @@ spring:
 
 logging:
   level:
+    root : debug
     com :
       project :
         outstagram : debug

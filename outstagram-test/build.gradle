@@ -38,7 +38,7 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "Finchley.RELEASE")
+    set('springCloudVersion', "Finchley.SR4")
 }
 dependencyManagement {
 
@@ -51,19 +51,29 @@ dependencyManagement {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-zuul', version: '2.0.4.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.4.RELEASE'
+    // eureka 패키지 안에 ribbon이 포함되어있음.
 
 
 
+    //bdd
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') // Spock 의존성 추가
+    testCompile('org.spockframework:spock-spring:1.1-groovy-2.4') // Spock 의존성 추가
+
+    //sleuth
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-zipkin'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-core'
+
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+
+
 
     compileOnly('org.projectlombok:lombok:1.18.4')
     testCompileOnly('org.projectlombok:lombok:1.18.4')
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
-    runtimeOnly 'mysql:mysql-connector-java'
+
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //common
@@ -73,11 +83,4 @@ dependencies {
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
-    testImplementation 'io.projectreactor:reactor-test'
-    compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
-
-
 }
-
-
-

@@ -11,6 +11,7 @@ dependencies {
     compile project(':outstagram-authentication-service')
     compile project(':outstagram-infra')
     compile project(':outstagram-zipkin')
+    compile project(':outstagram-test')
 }
 
 ////밑에다 둬야하네.. task는 ㄷㄷ..

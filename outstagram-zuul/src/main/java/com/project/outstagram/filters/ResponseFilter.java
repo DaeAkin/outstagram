@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import brave.Tracer;
 
 @Component
 public class ResponseFilter extends ZuulFilter{
@@ -14,7 +15,7 @@ public class ResponseFilter extends ZuulFilter{
     private static final Logger logger = LoggerFactory.getLogger(ResponseFilter.class);
 
     @Autowired
-    FilterUtils filterUtils;
+    Tracer tracer;
 
     @Override
     public String filterType() {
@@ -32,16 +33,24 @@ public class ResponseFilter extends ZuulFilter{
         return SHOULD_FILTER;
     }
 
+//    @Override
+//    public Object run() {
+//        RequestContext ctx = RequestContext.getCurrentContext();
+//
+//        logger.debug("Adding the correlation id to the outbound headers. {}", filterUtils.getCorrelationId());
+//        //원래 HTTP 요청에서 전달된 상관관계 ID를 가져와 응답에 삽입한다.
+//        ctx.getResponse().addHeader(FilterUtils.CORRELATION_ID, filterUtils.getCorrelationId());
+//
+//        //처음부터 끝까지 주울에 들어오고 나가는 요청 항목을 보여주기 위해 나가는 요청 URI를 기록하낟.
+//        logger.debug("Completing outgoing request for {}.", ctx.getRequest().getRequestURI());
+//
+//        return null;
+//    }
+
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-
-        logger.debug("Adding the correlation id to the outbound headers. {}", filterUtils.getCorrelationId());
-        //원래 HTTP 요청에서 전달된 상관관계 ID를 가져와 응답에 삽입한다.
-        ctx.getResponse().addHeader(FilterUtils.CORRELATION_ID, filterUtils.getCorrelationId());
-
-        //처음부터 끝까지 주울에 들어오고 나가는 요청 항목을 보여주기 위해 나가는 요청 URI를 기록하낟.
-        logger.debug("Completing outgoing request for {}.", ctx.getRequest().getRequestURI());
+        ctx.getResponse().addHeader("tmx-correlation-id", tracer.currentSpan().context().traceIdString());
 
         return null;
     }

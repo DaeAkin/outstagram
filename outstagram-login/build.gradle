@@ -90,7 +90,7 @@ dependencies {
 
     //sleuth
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-core'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-zipkin'
 
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-actuator')

@@ -1,6 +1,7 @@
 package com.project.outstagram;
 
 
+import brave.sampler.Sampler;
 import com.project.outstagram.global.utils.UserContextInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -42,6 +43,12 @@ public class OutstagramLoginServerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(OutstagramLoginServerApplication.class, args);
+    }
+
+    @Bean
+    public Sampler defaultSampler() {
+        // return new AlwaysSampler();
+        return Sampler.ALWAYS_SAMPLE;
     }
 
     //TODO WebFlux로 교체 예정
