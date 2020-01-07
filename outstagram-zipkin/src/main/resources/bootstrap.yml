@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: outstagram-zipkin
+  profiles:
+    active:
+      default
+
+
+
+

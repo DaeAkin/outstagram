@@ -1,8 +1,9 @@
 package com.project.outstagram.domain.member.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.project.outstagram.BaseAuditingEntity;
 import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

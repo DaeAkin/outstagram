@@ -8,4 +8,5 @@ include 'outstagram-discovery'
 include 'outstagram-config-server'
 include 'outstagram-authentication-service'
 include 'outstagram-infra'
+include 'outstagram-zipkin'
 

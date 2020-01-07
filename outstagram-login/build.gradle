@@ -4,6 +4,7 @@ buildscript {
     }
     repositories {
         mavenCentral()
+
     }
     dependencies {
 
@@ -11,25 +12,10 @@ buildscript {
 
     }
 }
-plugins {
-
-    id 'java'
-}
-
-bootJar {
-    baseName = 'outstagram-login'
-    version =  '0.1.0'
-}
-
-jib {
-    to {
-        image = "${dockerId}/${bootJar.baseName}:${bootJar.version}"
-        tags = ['latest']
-    }
-}
-
-
-
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 
 configurations {
@@ -37,7 +23,6 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
-
 
 
 group 'com.project'
@@ -48,14 +33,21 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.spring.io/milestone' }
 }
 
+ext {
+    set('springCloudVersion', "Finchley.RELEASE")
+}
 dependencyManagement {
 
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
+
 }
+
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -100,9 +92,26 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-core'
 
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
 
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    compileOnly('org.projectlombok:lombok:1.18.4')
+    testCompileOnly('org.projectlombok:lombok:1.18.4')
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
+    runtimeOnly 'mysql:mysql-connector-java'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //common
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
 
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.0.5.RELEASE'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    testImplementation 'io.projectreactor:reactor-test'
+    compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
 }

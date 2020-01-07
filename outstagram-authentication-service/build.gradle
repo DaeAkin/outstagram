@@ -1,38 +1,62 @@
-plugins {
-    id 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+
+    }
+    dependencies {
+
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+    }
+}
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
+
 group 'com.project'
-version '0.0.1'
+version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.spring.io/milestone' }
 }
 
-bootJar {
-    baseName = 'service-1'
-    version =  '0.1.0'
+ext {
+    set('springCloudVersion', "Finchley.RELEASE")
 }
+dependencyManagement {
 
-jib {
-    to {
-        image = "${dockerId}/${bootJar.baseName}:${bootJar.version}"
-        tags = ['latest']
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
+
 }
+
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-security
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-security', version: '2.1.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-security'
 
     // https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.7.RELEASE'
-
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-security
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-security', version: '2.1.3.RELEASE'
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
 
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
@@ -42,6 +66,27 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     runtimeOnly('mysql:mysql-connector-java')
+    compileOnly('org.projectlombok:lombok:1.18.4')
+    testCompileOnly('org.projectlombok:lombok:1.18.4')
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //common
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.0.5.RELEASE'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+    testImplementation 'io.projectreactor:reactor-test'
+    compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
 
 }
+
+
+
