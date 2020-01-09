@@ -3,6 +3,7 @@ package com.project.outstagram;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ import java.util.Map;
 @EnableJpaAuditing
 @RestController
 @EnableResourceServer
+@EnableEurekaClient
 //이 서비스가 OAuth2 서비스가 될 것이라고 스프링 클라우드에 알린다.
 @EnableAuthorizationServer
 public class OutstagramAuthenticationServiceApplication {
