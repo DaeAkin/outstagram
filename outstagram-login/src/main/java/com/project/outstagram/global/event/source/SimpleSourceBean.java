@@ -8,7 +8,7 @@ import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class SimpleSourceBean {
     // 발행자, 메세지를 내보내는 것임
     private Source source;
@@ -33,9 +33,9 @@ public class SimpleSourceBean {
                 .output()
                 .send(
                         MessageBuilder
-                        .withPayload(change)
-                        .build()
-                );
+                                .withPayload(change)
+                                .build());
+        //메세지를 보낼 준비가 되면 Source 클래스에서 정의된 채널에서 send() 메서드를 사용함.
 
     }
 

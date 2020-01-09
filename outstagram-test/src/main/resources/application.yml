@@ -10,8 +10,20 @@
 server:
   port: 12345
 
-
+spring:
+  cloud:
+    stream:
+      bindings:
+        inboundOrgChanges:
+          destination: loginChangeTopic
+          content-type: application/json
+          # group 프로퍼티는 한 번만 처리하라는 의미(process-once semantics)를 보장하는 데 사용된다.
+          group: licensingGroup
+      kafka:
+        binder:
+          zkNodes: localhost
+          brokers: localhost
 
 logging:
   level:
-    root : debug
+#    root : debug

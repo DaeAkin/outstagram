@@ -4,8 +4,11 @@ FROM openjdk:8-jdk-alpine
 #핑(ping) 유틸리티인 nc(netcat)를 설치해 의존하는 서비스 활성화 여부를 확인
 RUN  apk update && apk upgrade && apk add netcat-openbsd
 
-RUN mkdir -p /usr/local/outstagram-login
-COPY build/libs/outstagram-login-0.0.1-SNAPSHOT.jar /usr/local/outstagram-login/
+# RUN mkdir -p /usr/local/outstagram-login
+RUN ls -l
+# ARG JAR_FILE=build/libs/*.jar
+COPY build/libs/*.jar /usr/local/outstagram-login/
+# COPY build/libs/outstagram-login-0.0.1-SNAPSHOT.jar /usr/local/outstagram-login/
 ADD run.sh run.sh
-RUN chmod +x run.shld
+RUN chmod +x run.sh
 CMD ./run.sh

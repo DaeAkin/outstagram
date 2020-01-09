@@ -64,6 +64,9 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-zipkin'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-core'
 
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-stream'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka'
+
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
 

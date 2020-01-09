@@ -7,15 +7,15 @@ buildscript {
 
     }
     dependencies {
-
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'docker'
 
 
 configurations {
@@ -25,7 +25,7 @@ configurations {
 }
 
 
-group 'com.project'
+group 'outstagram-login'
 version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -72,10 +72,7 @@ dependencies {
     //jwt
     compile group: 'org.springframework.security', name: 'spring-security-jwt'
 
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream
     compile group: 'org.springframework.cloud', name: 'spring-cloud-stream'
-
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-kafka
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka'
 
     //db
@@ -114,4 +111,15 @@ dependencies {
 
     testImplementation 'io.projectreactor:reactor-test'
     compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    applicationName = jar.baseName
+    dockerfile = file('src/main/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
 }
