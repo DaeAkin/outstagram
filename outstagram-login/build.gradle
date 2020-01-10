@@ -11,11 +11,14 @@ buildscript {
         classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
+
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
+
 
 
 configurations {
@@ -113,13 +116,37 @@ dependencies {
     compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
 }
 
+//task jib {
+//    from {
+//        image = "docker://openjdk:8-jre-alpine" // 로컬환경에 설치되어 있는 도커데몬에서 Base Image 를 가져온다. (지금 상황에서는 굳이 원격에서 가져올 필요가 없으므로...)
+//    }
+//    to {
+//        image = "gaemi/jib-example-case3"
+//        tags = ["${project.version}".toString()]
+//        credHelper = "pass"
+//    }
+//    container {
+//        mainClass = "gaemi.jib.excample.JibExampleApplication"
+//        ports = ["8080"]
+//        volumes = ["/tmp"]
+//    }
+//}
+
+
+//docker {
+//    name "gaemi/jib-example-case1"
+//    tags "${project.version}", "${BUILD_VERSION}"
+//    files tasks.bootJar.outputs.files
+//    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
+//}
+//
 task buildDocker(type: Docker, dependsOn: build) {
     applicationName = jar.baseName
-    dockerfile = file('src/main/Dockerfile')
-    doFirst {
-        copy {
-            from jar
-            into stageDir
-        }
-    }
+    dockerfile = file('./Dockerfile')
+//    doFirst {
+//        copy {
+//            from jar
+//            into stageDir
+//        }
+//    }
 }

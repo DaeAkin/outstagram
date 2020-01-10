@@ -12,24 +12,31 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
-
+apply plugin: 'io.spring.dependency-management'
 group = 'com.tutorialspoint'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.spring.io/milestone' }
 }
+
 ext {
     springCloudVersion = 'Edgware.RELEASE'
 }
+
+dependencyManagement {
+
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+
+}
+
 dependencies {
     compile('io.zipkin.java:zipkin-autoconfigure-ui')
     compile('io.zipkin.java:zipkin-server')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
 }
