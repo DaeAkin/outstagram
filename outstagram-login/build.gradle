@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('se.transmode.gradle:gradle-docker:1.2')
+
     }
 }
 
@@ -17,8 +17,42 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'docker'
+apply plugin: 'com.google.cloud.tools.jib'
 
+bootJar {
+    baseName = 'outstagram-login'
+    version =  '0.0.1-SNAPSHOT'
+}
+
+ext.dockerId = 'kei890'
+
+//jib {
+//    to {
+//        image = "${dockerId}/${bootJar.baseName}:${bootJar.version}"
+//
+//        tags = ['latest']
+//    }
+//}
+
+jib {
+    allowInsecureRegistries = true
+    to {
+        image = "${dockerId}/${bootJar.baseName}:${bootJar.version}"
+        auth {
+            username = "kei890" // Defined in 'gradle.properties'.
+            password = ""
+        }
+        tags = ['latest']
+    }
+    container {
+        // Set JVM options.
+        jvmFlags = ['-XX:+UnlockExperimentalVMOptions', '-XX:+UseCGroupMemoryLimitForHeap', '-Dserver.port=13333']
+        // Expose different port.
+        ports = ['13333']
+        // Add labels.
+        labels = [maintainer: 'donghyeon']
+    }
+}
 
 
 configurations {
@@ -140,13 +174,4 @@ dependencies {
 //    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 //}
 //
-task buildDocker(type: Docker, dependsOn: build) {
-    applicationName = jar.baseName
-    dockerfile = file('./Dockerfile')
-//    doFirst {
-//        copy {
-//            from jar
-//            into stageDir
-//        }
-//    }
-}
+

@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('se.transmode.gradle:gradle-docker:1.2')
+
     }
 }
 plugins {
@@ -30,21 +30,6 @@ dependencies {
 
 
 
-jib {
-    from {
-        image = "docker://openjdk:8-jre-alpine" // 로컬환경에 설치되어 있는 도커데몬에서 Base Image 를 가져온다. (지금 상황에서는 굳이 원격에서 가져올 필요가 없으므로...)
-    }
-    to {
-        image = "gaemi/jib-example-case3"
-        tags = ["${project.version}".toString()]
-        credHelper = "pass"
-    }
-    container {
-        mainClass = "gaemi.jib.excample.JibExampleApplication"
-        ports = ["8080"]
-        volumes = ["/tmp"]
-    }
-}
 
 
 

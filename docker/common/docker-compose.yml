@@ -22,7 +22,7 @@ services:
     restart: always
 
   outstagram-login:
-    image: outstagram-login:latest
+    image: kei890/outstagram-login:latest
     container_name : "outstagram-login"
     links:
       - mysql
