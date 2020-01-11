@@ -106,7 +106,8 @@ dependencies {
     compileOnly('org.projectlombok:lombok:1.18.4')
     testCompileOnly('org.projectlombok:lombok:1.18.4')
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
-
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
 
