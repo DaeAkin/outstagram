@@ -16,15 +16,15 @@ plugins {
     id 'com.google.cloud.tools.jib' version '1.6.0'
 }
 
-task dockerDownAll(type:Exec) {
-    commandLine 'docker-compose', 'down'
-}
-
-task dockerRunAll(type:Exec) {
-    dependsOn dockerDownAll
-    dependsOn subprojects.jibDockerBuild
-    commandLine 'docker-compose', 'up', '-d'
-}
+//task dockerDownAll(type:Exec) {
+//    commandLine 'docker-compose', 'down'
+//}
+//
+//task dockerRunAll(type:Exec) {
+//    dependsOn dockerDownAll
+//    dependsOn subprojects.jibDockerBuild
+//    commandLine 'docker-compose', 'up', '-d'
+//}
 
 dependencies {
     compile project(':outstagram-zuul')

@@ -10,4 +10,5 @@ include 'outstagram-authentication-service'
 include 'outstagram-infra'
 include 'outstagram-test'
 include 'outstagram-zipkin'
+include 'outstagram-feed'
 

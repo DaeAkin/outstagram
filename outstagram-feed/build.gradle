@@ -1,0 +1,114 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.google.cloud.tools.jib'
+
+bootJar {
+    baseName = 'outstagram-feed'
+    version =  '0.0.1-SNAPSHOT'
+}
+
+jib {
+    allowInsecureRegistries = true
+    to {
+        image = "${bootJar.baseName}:${bootJar.version}"
+//        auth {
+//            username = "kei890" // Defined in 'gradle.properties'.
+//            password = ""
+//        }
+        tags = ['latest']
+    }
+    container {
+        // Set JVM options.
+        jvmFlags = ['-XX:+UnlockExperimentalVMOptions', '-XX:+UseCGroupMemoryLimitForHeap', '-Dserver.port=13333']
+        // Expose different port.
+        ports = ['14444']
+        // Add labels.
+        labels = [maintainer: 'donghyeon']
+
+        environment = [
+                "JAVA_TOOL_OPTIONS": "-Xmx2048m -XX:+UseG1GC",
+                "SPRING_PROFILES_ACTIVE": "docker",
+                "TZ": "Asia/Seoul"
+        ]
+    }
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://repo.spring.io/milestone' }
+}
+ext {
+    set('springCloudVersion', "Finchley.RELEASE")
+}
+
+dependencyManagement {
+
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix'
+
+    //oauth2 증명 방식을 사용하려면
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-security'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client'
+
+
+    // https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
+
+    // 이거 넣어야 yml 파일 userInfoUrl 됨..
+    // https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure'
+
+    //jwt
+    compile group: 'org.springframework.security', name: 'spring-security-jwt'
+
+    runtimeOnly('mysql:mysql-connector-java')
+    compile("com.h2database:h2")
+
+    //sleuth
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-sleuth-zipkin'
+
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+
+    compileOnly('org.projectlombok:lombok:1.18.4')
+    testCompileOnly('org.projectlombok:lombok:1.18.4')
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    testImplementation 'io.projectreactor:reactor-test'
+    compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.1.RELEASE'
+
+    implementation('org.springframework.boot:spring-boot-starter-webflux')
+}
