@@ -1,17 +1,23 @@
 package outstagram.domain.follow.domain;
 
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
+import outstagram.global.domain.BaseAuditingEntity;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@RestController
 @Slf4j
-@RequiredArgsConstructor
-public class Follow {
+@Builder
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Follow extends BaseAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +32,8 @@ public class Follow {
     //그 사람을 팔로우한 사람의 userId
     private Long followedId;
 
-    private boolean accept = false;
+    // boolean -> Boolean 변경 .. 왜 primitive 타입 못쓰지?
+    private Boolean followAccept = false;
 
 
 }

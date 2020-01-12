@@ -46,6 +46,7 @@ public class UserService {
         return  Mono
                 .defer(() -> Mono.just(userRepository.findByEmail(email)))
                 .subscribeOn(Schedulers.elastic())
+                // 가져오는게 느린것들(Consumer가 느림)은 subscribeOn을 써야하는데 위치는 상관없음!
                 .thenReturn(new EmailValidationResponse(true))
                 .onErrorReturn(new EmailValidationResponse(false));
     }
@@ -53,6 +54,7 @@ public class UserService {
     public Mono<Void> joinUser(UserJoinRequest userJoinRequest) {
         return Mono.just(userJoinRequest)
                 .publishOn(Schedulers.elastic())
+                //저장하는 작업이 느린것들(publishOn이 느린 것)밑에다 써야함
                 .doOnNext( u -> {
                     User user = u.toEntity();
                     user.initialize(userPasswordEncoder);
