@@ -35,5 +35,15 @@ public class Follow extends BaseAuditingEntity {
     // boolean -> Boolean 변경 .. 왜 primitive 타입 못쓰지?
     private Boolean followAccept = false;
 
+    //cons
 
+
+    public Follow(Long followingId, Long followedId) {
+        this.followingId = followingId;
+        this.followedId = followedId;
+    }
+
+    public void pushToBeFollowed() {
+        // 푸쉬알림 추후작성예정.
+    }
 }
