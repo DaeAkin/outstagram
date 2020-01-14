@@ -3,20 +3,20 @@ package outstagram.domain.follow.application;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.test.MockTest;
 
-import java.util.Optional;
-
 import static org.mockito.BDDMockito.given;
 public class FollowServiceTest extends MockTest {
 
     @InjectMocks
-    FollowService followService;
+    FollowService followService = new FollowServiceImpl();
 
     @Mock
+
     FollowRepository followRepository;
 
     @Mock

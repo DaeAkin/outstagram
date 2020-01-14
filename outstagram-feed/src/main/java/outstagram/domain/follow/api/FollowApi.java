@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import outstagram.domain.follow.application.FollowService;
+import outstagram.domain.follow.application.FollowServiceImpl;
 import outstagram.domain.follow.dto.FollowListResponse;
-import outstagram.domain.follow.dto.FollowRequest;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -18,7 +17,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/follow")
 public class FollowApi {
 
-    private final FollowService followService;
+    private final FollowServiceImpl followServiceImpl;
 
     // follow or unFollow
     @GetMapping("/{userId}")
