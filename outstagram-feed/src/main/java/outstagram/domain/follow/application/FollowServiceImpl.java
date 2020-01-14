@@ -53,8 +53,7 @@ public class FollowServiceImpl implements FollowService {
     private Mono<Void> follow(Long followingId, Long followedId) {
         Follow data = new Follow(followingId, followedId);
 
-        return Mono.just(followRepository.save(data))
-                .publishOn(Schedulers.elastic())
+        return followRepository.save(data)
                 .doOnSuccess( f -> f.pushToBeFollowed())
                 .then()
                 .log();

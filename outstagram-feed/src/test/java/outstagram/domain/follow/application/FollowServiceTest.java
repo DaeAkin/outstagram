@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.test.MockTest;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.BDDMockito.given;
 public class FollowServiceTest extends MockTest {
@@ -29,7 +30,8 @@ public class FollowServiceTest extends MockTest {
     public void 팔로우하기() {
         //given
         given(followRepository.findByFollowingIdAndFollowedId(followedId,followingId))
-                .willReturn(new Follow( ));
+                .willReturn(Mono.just(new Follow()));
+
 
         //when
 
