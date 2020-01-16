@@ -1,0 +1,166 @@
+---
+ribbon:
+  eureka:
+    enabled: true
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true #서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+
+server:
+  port: 15555
+
+signing :
+  #sha256(outstagram)
+  key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
+
+#spring:
+#  cloud:
+#    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
+#    stream:
+#      bindings:
+#        output: # 채널이름
+#          destination: loginChangeTopic #메세지를 넣을 메세지 큐(토픽) 이름
+#          contentType: application/json #스프링 클라우드 스트림에 송수신할 메세지 타입의 정보를 제공(현재 json)
+#      kafka: # 해당 서비스가 메세지 버스로 카프카를 사용할 것이라고 스프링에 전달(RabbitMQ 사용 가능)
+#        binder:
+#          #아래 두 내용은 스프링 클라우드 스트림에 카프카와 주키퍼의 네트워크 위치를 전달
+#          zk-nodes: localhost
+#          brokers: localhost
+
+  profiles: default
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  #  main:
+  #    web-application-type: none # 웹 어플리케이션이면 이 프로퍼티를 써줘야한다.
+  thymeleaf:
+    cache: false
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/outstagram?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: outstagram
+    password: 1234
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+logging:
+  level:
+#    root : debug
+    com :
+      project :
+        outstagram : debug
+
+
+
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8901/user
+
+---
+ribbon:
+  eureka:
+    enabled: true
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true #서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+
+server:
+  port: 15555
+
+signing :
+  #sha256(outstagram)
+  key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
+
+spring:
+  cloud:
+    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
+    stream:
+      bindings:
+        output:
+          destination: loginChangeTopic
+          contentType: application/json
+      kafka:
+        binder:
+          zk-nodes: localhost
+          brokers: localhost
+
+  profiles: docker
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  #  main:
+  #    web-application-type: none # 웹 어플리케이션이면 이 프로퍼티를 써줘야한다.
+  thymeleaf:
+    cache: false
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+#으.. 망할 도커자식!!
+  #
+  #The ports mapping in your docker-compose.yml is only relevant for the host,
+   # so you'll be able to connect to your DB through localhost:3308.
+    #But inside your other docker-compose containers (that is, the compose default network),
+    #you'd have to use workaround-mysql:3306.
+    #https://stackoverflow.com/questions/56429995/spring-boot-docker-cannot-connect-to-mysql-connection-refused-createcommunica/56431451#56431451
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/outstagram?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 1234
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+logging:
+  level:
+    com :
+      project :
+        outstagram : debug
+
+
+
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8901/user

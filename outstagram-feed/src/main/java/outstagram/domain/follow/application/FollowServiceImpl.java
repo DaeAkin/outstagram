@@ -20,8 +20,8 @@ import java.util.function.Supplier;
 @Slf4j
 public class FollowServiceImpl implements FollowService {
 
-    private  FollowRepository followRepository;
-    private  WebClient webClient;
+    private FollowRepository followRepository;
+    private WebClient webClient;
 
     public Mono<Void> followOrUnFollow(Long followingId, Long followedId) {
 
