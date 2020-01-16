@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import outstagram.global.domain.BaseAuditingEntity;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 @Slf4j
 @Builder
 @Getter
@@ -16,7 +19,7 @@ import outstagram.global.domain.BaseAuditingEntity;
 public class Follow extends BaseAuditingEntity {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     /**

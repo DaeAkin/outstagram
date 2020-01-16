@@ -32,14 +32,15 @@ public class FollowApi {
     }
 
     // get followed list
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/followed-list")
-    public Mono<FollowListResponse> followedList() {
+    public Mono<FollowListResponse> followedList(Authentication authentication) {
         return null;
     }
 
     // get following list
     @GetMapping("/following-list")
-    public Mono<FollowListResponse> followingList() {
+    public Mono<FollowListResponse> followingList(Authentication authentication) {
         return null;
     }
 
