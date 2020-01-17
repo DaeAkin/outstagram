@@ -18,5 +18,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         ;
 
 
+
+
     }
 }

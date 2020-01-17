@@ -25,10 +25,12 @@ public class FollowApi {
     @ResponseStatus(value = HttpStatus.CREATED)
     // follow or unFollow
     @GetMapping("/{userId}")
-    public Mono<Void> follow(@PathVariable("userId") Long userId, Authentication authentication) {
+    public void follow(@PathVariable("userId") Long userId, Authentication authentication) {
+        System.out.println(authentication);
+//
         Long id = Long.parseLong(authentication.getPrincipal().toString());
 
-        return null;
+         followService.followOrUnFollow(5L,userId);
     }
 
     // get followed list

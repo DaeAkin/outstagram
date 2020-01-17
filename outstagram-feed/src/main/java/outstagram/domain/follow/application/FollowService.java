@@ -5,7 +5,7 @@ import reactor.core.publisher.Mono;
 
 public interface FollowService {
 
-    Mono<Void> followOrUnFollow(Long followingId, Long followedId);
-    Mono<FollowListResponse> getFollowedList(Long userId);
-    Mono<FollowListResponse> getFollowingList(Long userId);
+    void followOrUnFollow(Long followingId, Long followedId);
+    FollowListResponse getFollowedList(Long userId);
+    FollowListResponse getFollowingList(Long userId);
 }

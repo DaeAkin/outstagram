@@ -12,6 +12,7 @@ import outstagram.domain.follow.dto.FollowListResponse;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
@@ -23,41 +24,37 @@ public class FollowServiceImpl implements FollowService {
     private FollowRepository followRepository;
     private WebClient webClient;
 
-    public Mono<Void> followOrUnFollow(Long followingId, Long followedId) {
+    public void followOrUnFollow(Long followingId, Long followedId) {
+       Optional.of(isFollowed(followingId,followedId))
+                .map(r -> {
+                    if(r) {
+                         unFollow(followingId,followedId);
+                    } else {
+                         follow(followingId,followedId);
+                    }
+                    return null;
+                });
+    }
 
-//        isFollowed(followingId,followedId)
-
-                
+    public FollowListResponse getFollowedList(Long userId) {
         return null;
     }
 
-    public Mono<FollowListResponse> getFollowedList(Long userId) {
-        return null;
-    }
-
-    public Mono<FollowListResponse> getFollowingList(Long userId) {
+    public FollowListResponse getFollowingList(Long userId) {
         return null;
     }
 
 
-    private Mono<Boolean> isFollowed(Long followingId, Long followedId) {
-        return Mono
-                .defer(() -> Mono.just(followRepository.findByFollowingIdAndFollowedId(followingId, followedId)))
-                .subscribeOn(Schedulers.elastic())
-                .thenReturn(true)
-                .onErrorReturn(false)
-                .log();
-
+    private Boolean isFollowed(Long followingId, Long followedId) {
+        return followRepository.findByFollowingIdAndFollowedId(followingId, followedId)
+                .map(f -> true)
+                .orElse(false);
     }
 
-    private Mono<Void> follow(Long followingId, Long followedId) {
+    private void follow(Long followingId, Long followedId) {
         Follow data = new Follow(followingId, followedId);
-
-        return followRepository.save(data)
-                .doOnSuccess( f -> f.pushToBeFollowed())
-                .then()
-                .log();
-
+        followRepository.save(data)
+                .pushToBeFollowed();
     }
 
     private Mono<Void> unFollow(Long followingId, Long followedId) {

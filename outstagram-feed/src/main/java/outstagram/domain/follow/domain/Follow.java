@@ -3,9 +3,9 @@ package outstagram.domain.follow.domain;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import outstagram.global.domain.BaseAuditingEntity;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
@@ -15,7 +15,7 @@ import javax.persistence.GenerationType;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
+@Entity
 public class Follow extends BaseAuditingEntity {
 
     @Id
