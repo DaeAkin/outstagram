@@ -2,12 +2,12 @@ package outstagram.domain.follow.domain;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.Id;
 import outstagram.global.domain.BaseAuditingEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Slf4j
 @Builder

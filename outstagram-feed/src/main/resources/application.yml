@@ -23,7 +23,7 @@ signing :
   #sha256(outstagram)
   key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
 
-#spring:
+spring:
 #  cloud:
 #    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
 #    stream:

@@ -1,7 +1,6 @@
 package outstagram.domain.follow.application;
 
 import outstagram.domain.follow.dto.FollowListResponse;
-import reactor.core.publisher.Mono;
 
 public interface FollowService {
 
