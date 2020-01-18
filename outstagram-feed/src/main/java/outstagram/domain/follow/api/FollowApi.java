@@ -23,10 +23,11 @@ public class FollowApi {
     @GetMapping("/{userId}")
     public void follow(@PathVariable("userId") Long userId, Authentication authentication) {
         System.out.println("아우띠" + authentication);
+        System.out.println("userId : " + userId);
 //
         Long id = Long.parseLong(authentication.getPrincipal().toString());
 
-        System.out.println("id : " + id);
+
 
          followService.followOrUnFollow(5L,userId);
     }

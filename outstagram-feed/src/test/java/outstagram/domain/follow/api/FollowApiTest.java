@@ -14,15 +14,20 @@ import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.test.IntegrationTest;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class FollowApiTest extends IntegrationTest {
+
 
 
     @Autowired
@@ -35,8 +40,9 @@ public class FollowApiTest extends IntegrationTest {
     @Autowired
     private FollowRepository followRepository;
 
-    @MockBean
-    Authentication authentication;
+
+//    @MockBean
+//    Authentication authentication;
 
 
     // 팔로우 하는사람
@@ -47,15 +53,18 @@ public class FollowApiTest extends IntegrationTest {
     @Test
     public void 팔로우하기() throws Exception {
         //given
+        Authentication authentication = mock(Authentication.class);
+        System.out.println("test 아우띠 :" + authentication);
         given(authentication.getPrincipal()).willReturn(followingId);
 
         //when
-        ResultActions follow = follow(followedId);
+        followApi.follow(1L,authentication);
+//        ResultActions follow = follow(followedId);
         Follow followed = followRepository.findByFollowingIdAndFollowedId(followingId, followedId).get();
 
         //then
-        follow
-                .andExpect(status().isCreated());
+
+//                .andExpect(status().isCreated());
         assertThat(followed.getFollowAccept()).isFalse();
         assertThat(followed.getFollowedId()).isEqualTo(followedId);
         assertThat(followed.getFollowingId()).isEqualTo(followingId);
@@ -104,7 +113,7 @@ public class FollowApiTest extends IntegrationTest {
 //https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/
     private ResultActions follow(Long followedId) throws Exception {
         return mvc.perform(get("/follow/"+followedId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON).with(user("donghyeon").roles("web"))
                  )       .andDo(print());
 
     }
