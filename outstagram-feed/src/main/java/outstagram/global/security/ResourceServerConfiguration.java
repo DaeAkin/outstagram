@@ -13,6 +13,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/follow/**").permitAll()
                 .anyRequest().access("#oauth2.hasScope('webclient')")
                 .anyRequest().access("#oauth2.hasScope('mobileclient')")
         ;

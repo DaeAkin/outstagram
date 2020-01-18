@@ -1,8 +1,10 @@
 package outstagram.domain.follow.application;
 
+import com.netflix.discovery.converters.Auto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import outstagram.domain.follow.dao.FollowRepository;
@@ -18,7 +20,9 @@ import java.util.Optional;
 @Slf4j
 public class FollowServiceImpl implements FollowService {
 
+    @Autowired
     private FollowRepository followRepository;
+    @Autowired
     private RestTemplate restTemplate;
 
     public void followOrUnFollow(Long followingId, Long followedId) {

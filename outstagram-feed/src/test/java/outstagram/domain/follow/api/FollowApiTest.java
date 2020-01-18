@@ -35,9 +35,6 @@ public class FollowApiTest extends IntegrationTest {
     @Autowired
     private FollowRepository followRepository;
 
-    @Autowired
-    protected WebTestClient client;
-
     @MockBean
     Authentication authentication;
 
@@ -50,15 +47,15 @@ public class FollowApiTest extends IntegrationTest {
     @Test
     public void 팔로우하기() throws Exception {
         //given
-        given(authentication.getPrincipal()).willReturn(followedId);
+        given(authentication.getPrincipal()).willReturn(followingId);
 
         //when
         ResultActions follow = follow(followedId);
-        Follow followed = followRepository.findByFollowingIdAndFollowedId(followingId, followedId).block();
+        Follow followed = followRepository.findByFollowingIdAndFollowedId(followingId, followedId).get();
 
         //then
         follow
-                .andExpect(status().isCreated();
+                .andExpect(status().isCreated());
         assertThat(followed.getFollowAccept()).isFalse();
         assertThat(followed.getFollowedId()).isEqualTo(followedId);
         assertThat(followed.getFollowingId()).isEqualTo(followingId);
@@ -106,7 +103,7 @@ public class FollowApiTest extends IntegrationTest {
     //requests~
 //https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/
     private ResultActions follow(Long followedId) throws Exception {
-        return mvc.perform(get("/follow")
+        return mvc.perform(get("/follow/"+followedId)
                 .contentType(MediaType.APPLICATION_JSON)
                  )       .andDo(print());
 

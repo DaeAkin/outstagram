@@ -2,9 +2,9 @@ package outstagram.test_fixture;
 
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
-import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class FollowFixtureGenerator {
@@ -15,13 +15,13 @@ public class FollowFixtureGenerator {
      * @param num
      * @return
      */
-    public static Flux<Follow> insertFollowingUser(Long followedId, FollowRepository followRepository, Integer num) {
+    public static List<Follow> insertFollowingUser(Long followedId, FollowRepository followRepository, Integer num) {
         Random random = new Random();
         ArrayList<Follow> followingList = new ArrayList<>();
         for(Integer i = 0; i<num; i++) {
             long followingId = (random.nextInt(1000));
             followingList.add(new Follow(followingId,followedId));
         }
-        return followRepository.saveAll(followingList);
+        return (List)followRepository.saveAll(followingList);
     }
 }

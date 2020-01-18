@@ -38,7 +38,8 @@ import java.util.concurrent.Executors;
 @EnableCircuitBreaker
 @EnableResourceServer
 // 스프링 클라우드 스트림에 애플리케이션을 메세지 브로커로 바인딩하라고 알린다.
-//@EnableBinding(Source.class)
+//kafka https://yfkwon.tistory.com/26
+@EnableBinding(Source.class)
 public class OutstagramLoginServerApplication {
 
     public static void main(String[] args) {
