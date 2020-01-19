@@ -30,13 +30,8 @@ public class FollowServiceTest extends MockTest {
         given(followRepository.findByFollowingIdAndFollowedId(followedId,followingId))
                 .willReturn(java.util.Optional.of(new Follow()));
 
-
         //when
         followService.followOrUnFollow(followingId,followedId);
-
-
-
-
     }
 
     @Test

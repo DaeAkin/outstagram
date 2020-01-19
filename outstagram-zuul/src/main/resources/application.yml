@@ -19,6 +19,14 @@ management:
         include:
           - "*"
 zuul:
+  ignored-services : '*'
+  routes :
+    outstagram-login : /loginservice/**
+    outstagram-authentication-service : /authservice/**
+    outstagram-feed : /feedservice/**
+
+
+
   sensitiveHeaders: Cookie,Set-Cookie # zuul은 기본적으로 예민한 Header 정보인 Cookie,Set-Cookie,authorization 정보를 전송하지않음.
   # 위에 뜻은, Cookie,Set-Cookie만 전송 안한다는 뜻
   prefix : /api

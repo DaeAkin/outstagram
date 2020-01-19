@@ -14,6 +14,10 @@ import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.test.IntegrationTest;
+import outstagram.test_fixture.FollowFixtureGenerator;
+
+import java.util.Optional;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 
@@ -41,8 +45,8 @@ public class FollowApiTest extends IntegrationTest {
     private FollowRepository followRepository;
 
 
-//    @MockBean
-//    Authentication authentication;
+    @MockBean
+    Authentication authentication;
 
 
     // 팔로우 하는사람
@@ -53,12 +57,12 @@ public class FollowApiTest extends IntegrationTest {
     @Test
     public void 팔로우하기() throws Exception {
         //given
-        Authentication authentication = mock(Authentication.class);
+        given(authentication.getPrincipal()).willReturn(followingId);
         System.out.println("test 아우띠 :" + authentication);
         given(authentication.getPrincipal()).willReturn(followingId);
 
         //when
-        followApi.follow(1L,authentication);
+        followApi.follow(followedId,authentication);
 //        ResultActions follow = follow(followedId);
         Follow followed = followRepository.findByFollowingIdAndFollowedId(followingId, followedId).get();
 
@@ -70,24 +74,25 @@ public class FollowApiTest extends IntegrationTest {
         assertThat(followed.getFollowingId()).isEqualTo(followingId);
     }
 
-//    @Test
-//    public void 언팔로우하기() {
-//        //given
-//        given(authentication.getPrincipal()).willReturn(followingId);
-//
-//        //when
-//        unFollow(followingId,followedId);
-//        Follow followed = followRepository.findByFollowingIdAndFollowedId(followingId, followedId).block();
-//
-//        //then
-//        assertThat(followed).isNull();
-//    }
+    @Test
+    public void 언팔로우하기() {
+        //given
+        given(authentication.getPrincipal()).willReturn(followingId);
+
+        //when
+        followApi.follow(followedId,authentication);
+        followApi.follow(followedId,authentication);
+        Optional<Follow> optionalFollow = followRepository.findByFollowingIdAndFollowedId(followingId, followedId);
+
+
+        //then
+        assertThat(optionalFollow.isPresent()).isFalse();
+    }
 
 //    @Test
 //    public void 나를팔로우한사람들_리스트_가져오기() {
-//        //prepare db 필요할듯..
-//        FollowFixtureGenerator.insertFollowingUser(followedId,followRepository,5);
 //        //given
+//        FollowFixtureGenerator.insertFollowingUser(followedId,followRepository,5);
 //        given(authentication.getPrincipal()).willReturn(followingId);
 //
 //        //when

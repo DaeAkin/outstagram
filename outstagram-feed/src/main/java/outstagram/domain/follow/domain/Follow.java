@@ -2,6 +2,7 @@ package outstagram.domain.follow.domain;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.global.domain.BaseAuditingEntity;
 
 import javax.persistence.Entity;
@@ -45,4 +46,8 @@ public class Follow extends BaseAuditingEntity {
     public void pushToBeFollowed() {
         // 푸쉬알림 추후작성예정.
     }
+
+//    public toFollowListResponse() {
+//        return FollowListResponse
+//    }
 }

@@ -12,7 +12,11 @@ import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 @AllArgsConstructor
@@ -25,23 +29,33 @@ public class FollowServiceImpl implements FollowService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Transactional
     public void followOrUnFollow(Long followingId, Long followedId) {
        Optional.of(isFollowed(followingId,followedId))
                 .map(r -> {
                     if(r) {
+                        log.debug("follow");
                          unFollow(followingId,followedId);
                     } else {
+                        log.debug("unFollow");
                          follow(followingId,followedId);
                     }
                     return null;
                 });
     }
 
-    public FollowListResponse getFollowedList(Long userId) {
+    @Transactional
+    public List<FollowListResponse> getFollowedList(Long userId) {
+//        followRepository.findAllByFollowedId(userId)
+//                .orElseGet((Supplier<? extends List<Follow>>) new ArrayList<FollowListResponse>())
+//                .stream()
+//                .flatMap( r -> r.)
+
         return null;
     }
 
-    public FollowListResponse getFollowingList(Long userId) {
+    @Transactional
+    public List<FollowListResponse> getFollowingList(Long userId) {
         return null;
     }
 
@@ -59,14 +73,7 @@ public class FollowServiceImpl implements FollowService {
     }
 
     private void unFollow(Long followingId, Long followedId) {
-
-//        Mono.empty()
-//        return Mono
-//                .defer(() -> followRepository.deleteAll())
-////                .defer(() -> Mono.just(followRepository.deleteByFollowingIdAndFollowedId(followingId,followedId)))
-//                .subscribeOn()
-//                .then()
-//                .log();
+        followRepository.deleteByFollowingIdAndFollowedId(followingId,followedId);
 
     }
 }
