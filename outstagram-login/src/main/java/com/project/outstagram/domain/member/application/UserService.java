@@ -71,7 +71,7 @@ public class UserService {
                     {@HystrixProperty(name = "coreSize",value="30"), //스레드 풀의 개수를 설정
                             @HystrixProperty(name="maxQueueSize", value="10")})
     public Mono<User> getUserInfo(Long id) {
-        sleep();
+//        sleep();
         return Mono.
                 defer(() -> Mono.just(userRepository.findById(id).get()))
                 .subscribeOn(Schedulers.elastic());

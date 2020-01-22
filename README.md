@@ -29,3 +29,9 @@
 
 - 스프링 슬루쓰
 - 스레드 로컬
+
+
+
+## RestTemplate에 Oauth2 토큰을 함께 보내는 방법
+
+![](./docs/img/RestTemplate.png)

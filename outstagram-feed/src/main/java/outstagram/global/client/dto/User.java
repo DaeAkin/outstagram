@@ -2,9 +2,10 @@ package outstagram.global.client.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
 public class User {
 
     private long id;
