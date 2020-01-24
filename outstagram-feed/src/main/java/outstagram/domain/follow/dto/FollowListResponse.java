@@ -8,6 +8,5 @@ import lombok.Data;
 public class FollowListResponse {
 
     long id;
-
     String email;
 }

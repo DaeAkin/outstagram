@@ -2,9 +2,12 @@ package outstagram.domain.follow.api;
 
 
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -13,9 +16,12 @@ import outstagram.domain.follow.application.FollowService;
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
+import outstagram.global.client.LoginRestTemplate;
+import outstagram.global.client.dto.User;
 import outstagram.test.IntegrationTest;
 import outstagram.test_fixture.FollowFixtureGenerator;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -47,6 +53,9 @@ public class FollowApiTest extends IntegrationTest {
 
     @MockBean
     Authentication authentication;
+
+    @MockBean
+    LoginRestTemplate loginRestTemplate;
 
 
     // 팔로우 하는사람
@@ -89,27 +98,45 @@ public class FollowApiTest extends IntegrationTest {
         assertThat(optionalFollow.isPresent()).isFalse();
     }
 
-//    @Test
-//    public void 나를팔로우한사람들_리스트_가져오기() {
-//        //given
-//        FollowFixtureGenerator.insertFollowingUser(followedId,followRepository,5);
-//        given(authentication.getPrincipal()).willReturn(followingId);
-//
-//        //when
-//        EntityExchangeResult followedList = getFollowedList();
-//
-//
-//
-//    }
-//
-//    @Test
-//    public void 팔로잉리스트_가져오기() {
-//        //given
-//        given(authentication.getPrincipal()).willReturn(followingId);
-//
-//        //when
-//        getFollowingList();
-//    }
+    @Test
+    public void 나를팔로우한사람들_리스트_가져오기() {
+        //given
+        int followedListNum = 5;
+        List<Follow> follows = FollowFixtureGenerator.insertFollowingUser(followingId, followRepository, followedListNum);
+        for (Follow follow: follows) {
+            given(loginRestTemplate.getUserById(follow.getFollowingId()))
+                    .willReturn(new User("follow@gmail.com"));
+        }
+        given(authentication.getPrincipal()).willReturn(followingId);
+
+        //when
+        ResponseEntity<List<FollowListResponse>> response = followApi.followedList(authentication);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().size()).isEqualTo(followedListNum);
+    }
+
+    @Test
+    public void 내가_팔로우_한_리스트_가져오기() {
+        //given
+        int followedListNum = 5;
+        List<Follow> follows = FollowFixtureGenerator.insertFollowedUser(followingId, followRepository, followedListNum);
+        for (Follow follow: follows) {
+            given(loginRestTemplate.getUserById(follow.getFollowedId()))
+                    .willReturn(new User("follow@gmail.com"));
+        }
+        given(authentication.getPrincipal()).willReturn(followingId);
+
+        //when
+        ResponseEntity<List<FollowListResponse>> response = followApi.followingList(authentication);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().size()).isEqualTo(followedListNum);
+
+
+    }
 
 
     //setUp

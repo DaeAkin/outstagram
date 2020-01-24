@@ -51,10 +51,10 @@ public class OutstagramFeedServerApplication {
 //        return new RestTemplate();
 //    }
 
-    @Bean
-    public OAuth2RestTemplate restTemplate(UserInfoRestTemplateFactory factory) {
-        return factory.getUserInfoRestTemplate();
-    }
+//    @Bean
+//    public OAuth2RestTemplate restTemplate(UserInfoRestTemplateFactory factory) {
+//        return factory.getUserInfoRestTemplate();
+//    }
 
     @Primary
     @Bean

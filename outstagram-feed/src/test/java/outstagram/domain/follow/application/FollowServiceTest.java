@@ -6,7 +6,16 @@ import org.mockito.Mock;
 import org.springframework.security.core.Authentication;
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
+import outstagram.domain.follow.dto.FollowListResponse;
+import outstagram.global.client.LoginRestTemplate;
+import outstagram.global.client.dto.User;
 import outstagram.test.MockTest;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 
@@ -21,22 +30,54 @@ public class FollowServiceTest extends MockTest {
     @Mock
     Authentication authentication;
 
+    @Mock
+    LoginRestTemplate loginRestTemplate;
+
+
     private final long followingId = 5;
     private final long followedId = 1;
 
     @Test
-    public void 팔로우하기() {
+    public void 나를팔로우한_사람들_리스트_하나도없음() {
         //given
-        given(followRepository.findByFollowingIdAndFollowedId(followedId,followingId))
-                .willReturn(java.util.Optional.of(new Follow()));
+        long userId = 5;
+        given(followRepository.findAllByFollowedId(userId)).willReturn(Optional.empty());
 
         //when
-        followService.followOrUnFollow(followingId,followedId);
+        List<FollowListResponse> followedList = followService.getFollowedList(userId);
+
+        //then
+        assertThat(followedList).isEmpty();
     }
 
     @Test
-    public void 언팔로우하기()  {
+    public void 나를팔로우한_사람들이_있음() {
+        //given
+        long userId = 5;
+        List<Follow> follows = followedList(userId);
+        for (Follow follow: follows) {
+            given(loginRestTemplate.getUserById(follow.getFollowingId()))
+                    .willReturn(new User("follow@gmail.com"));
+        }
+        given(followRepository.findAllByFollowedId(userId))
+                .willReturn(Optional.of(follows));
+
+        //when
+        List<FollowListResponse> followedList = followService.getFollowedList(userId);
+
+        //then
+        assertThat(followedList).isNotEmpty();
+        assertThat(followedList.size()).isEqualTo(3);
 
     }
+
+    private List<Follow> followedList(long followedId) {
+        Follow follow1 = new Follow(1L,followedId);
+        Follow follow2 = new Follow(2L,followedId);
+        Follow follow3 = new Follow(3L,followedId);
+        List<Follow> follows = Arrays.asList(follow1, follow2, follow3);
+        return follows;
+    }
+
 
 }

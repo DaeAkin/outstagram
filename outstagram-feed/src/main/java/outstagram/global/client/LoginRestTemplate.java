@@ -17,7 +17,7 @@ public class LoginRestTemplate {
         User user = null;
 
         ResponseEntity<User> restExchange = restTemplate.exchange(
-                "http://172.30.1.26:5555/api/loginservice/user/whoami",
+                "http://OUTSTAGRAM-ZUUL:5555/api/loginservice/user/whoami",
                 HttpMethod.GET,
                 null, User.class, userId);
 

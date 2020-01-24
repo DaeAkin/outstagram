@@ -23,15 +23,6 @@ public class FollowApi {
     @Autowired
     FollowService followService;
 
-    @Autowired
-    LoginRestTemplate restTemplate;
-
-
-    @GetMapping("/test")
-    public void test() {
-        restTemplate.getUserById(1L);
-    }
-
     @ResponseStatus(value = HttpStatus.CREATED)
     // follow or unFollow
     @GetMapping("/{userId}")
@@ -42,18 +33,18 @@ public class FollowApi {
     }
 
     // get followed list
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/followed-list")
     public ResponseEntity<List<FollowListResponse>> followedList(Authentication authentication) {
         Long id = Long.parseLong(authentication.getPrincipal().toString());
-        return null;
+        return new ResponseEntity<>(followService.getFollowedList(id),HttpStatus.OK);
     }
-//
-//    // get following list
-//    @GetMapping("/following-list")
-//    public Mono<FollowListResponse> followingList(Authentication authentication) {
-//        return null;
-//    }
+
+    // get following list
+    @GetMapping("/following-list")
+    public ResponseEntity<List<FollowListResponse>> followingList(Authentication authentication) {
+        Long id = Long.parseLong(authentication.getPrincipal().toString());
+        return new ResponseEntity<>(followService.getFollowingList(id),HttpStatus.OK);
+    }
 
 
 }

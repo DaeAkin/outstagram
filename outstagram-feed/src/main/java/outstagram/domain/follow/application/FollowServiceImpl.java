@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
+import outstagram.global.client.LoginRestTemplate;
 
 
 import javax.transaction.Transactional;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class FollowServiceImpl implements FollowService {
     @Autowired
     private FollowRepository followRepository;
     @Autowired
-    private RestTemplate restTemplate;
+    LoginRestTemplate loginRestTemplate;
 
     @Transactional
     public void followOrUnFollow(Long followingId, Long followedId) {
@@ -46,17 +48,31 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional
     public List<FollowListResponse> getFollowedList(Long userId) {
-//        followRepository.findAllByFollowedId(userId)
-//                .orElseGet((Supplier<? extends List<Follow>>) new ArrayList<FollowListResponse>())
-//                .stream()
-//                .flatMap( r -> r.)
-
-        return null;
+        return followRepository.findAllByFollowedId(userId)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .map( r -> {
+                   return FollowListResponse.builder()
+                           .id(r.getFollowingId())
+                           .email(loginRestTemplate.getUserById(r.getFollowingId()).getEmail())
+                           .build();
+                         })
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public List<FollowListResponse> getFollowingList(Long userId) {
-        return null;
+       return followRepository.findAllByFollowingId(userId)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .map( r -> {
+                    return FollowListResponse.builder()
+                            .id(r.getFollowedId())
+                            .email(loginRestTemplate.getUserById(r.getFollowedId()).getEmail())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
     }
 
 

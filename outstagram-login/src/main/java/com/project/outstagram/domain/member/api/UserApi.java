@@ -37,9 +37,9 @@ public class UserApi {
     }
 
     @GetMapping("/whoami")
-    public User whoAmI(Authentication authentication) {
+    public Mono<User> whoAmI(Authentication authentication) {
         Long id = Long.parseLong(authentication.getPrincipal().toString());
-        return userService.getUserInfo(id).block();
+        return userService.getUserInfo(id);
     }
 
 
