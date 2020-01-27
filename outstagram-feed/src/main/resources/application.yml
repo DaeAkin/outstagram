@@ -1,3 +1,4 @@
+#feed 모듈 application.yml
 ---
 ribbon:
   eureka:
@@ -23,19 +24,20 @@ signing :
   #sha256(outstagram)
   key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
 
+
 spring:
-#  cloud:
-#    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
-#    stream:
-#      bindings:
-#        output: # 채널이름
-#          destination: loginChangeTopic #메세지를 넣을 메세지 큐(토픽) 이름
-#          contentType: application/json #스프링 클라우드 스트림에 송수신할 메세지 타입의 정보를 제공(현재 json)
-#      kafka: # 해당 서비스가 메세지 버스로 카프카를 사용할 것이라고 스프링에 전달(RabbitMQ 사용 가능)
-#        binder:
-#          #아래 두 내용은 스프링 클라우드 스트림에 카프카와 주키퍼의 네트워크 위치를 전달
-#          zk-nodes: localhost
-#          brokers: localhost
+  cloud:
+    # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
+    stream:
+      bindings:
+        output: # 채널이름
+          destination: fcmTopic #메세지를 넣을 메세지 큐(토픽) 이름
+          contentType: application/json #스프링 클라우드 스트림에 송수신할 메세지 타입의 정보를 제공(현재 json)
+      kafka: # 해당 서비스가 메세지 버스로 카프카를 사용할 것이라고 스프링에 전달(RabbitMQ 사용 가능)
+        binder:
+          #아래 두 내용은 스프링 클라우드 스트림에 카프카와 주키퍼의 네트워크 위치를 전달
+          zk-nodes: localhost
+          brokers: localhost
 
   profiles: default
   servlet:
@@ -109,11 +111,12 @@ spring:
     # stream.bindings는 서비스 스프링 클라우드 스트림의 메세지 브로커에 발행하려는 구성의 시작점이다.
     stream:
       bindings:
-        output:
-          destination: loginChangeTopic
-          contentType: application/json
-      kafka:
+        output: # 채널이름
+          destination: fcmTopic #메세지를 넣을 메세지 큐(토픽) 이름
+          contentType: application/json #스프링 클라우드 스트림에 송수신할 메세지 타입의 정보를 제공(현재 json)
+      kafka: # 해당 서비스가 메세지 버스로 카프카를 사용할 것이라고 스프링에 전달(RabbitMQ 사용 가능)
         binder:
+          #아래 두 내용은 스프링 클라우드 스트림에 카프카와 주키퍼의 네트워크 위치를 전달
           zk-nodes: localhost
           brokers: localhost
 

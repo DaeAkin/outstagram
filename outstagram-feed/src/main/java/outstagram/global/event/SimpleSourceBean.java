@@ -1,10 +1,10 @@
-package com.project.outstagram.global.event.source;
+package outstagram.global.event;
 
-import com.project.outstagram.global.event.models.LoginChangeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
@@ -21,20 +21,18 @@ public class SimpleSourceBean {
         this.source = source;
     }
 
-    public void publishLoginChange(String action, String someId) {
+    public void publishFcmMessage() {
         logger.debug("Sending Kafka message {} for ");
-        LoginChangeModel change = new LoginChangeModel(
-                LoginChangeModel.class.getTypeName(),
-                action,
-                "UserContext.ge"
-        );
+        System.out.println("Sending Kafka message {} for ");
 
         source
                 .output()
                 .send(
                         MessageBuilder
-                                .withPayload(change)
+                                .withPayload("test")
                                 .build());
+
+
         //메세지를 보낼 준비가 되면 Source 클래스에서 정의된 채널에서 send() 메서드를 사용함.
 
     }

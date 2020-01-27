@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import outstagram.domain.follow.application.FollowService;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.global.client.LoginRestTemplate;
+import outstagram.global.event.SimpleSourceBean;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class FollowApi {
 
     @Autowired
     FollowService followService;
+
+    @Autowired
+    SimpleSourceBean simpleSourceBean;
 
     @ResponseStatus(value = HttpStatus.CREATED)
     // follow or unFollow
@@ -46,5 +50,10 @@ public class FollowApi {
         return new ResponseEntity<>(followService.getFollowingList(id),HttpStatus.OK);
     }
 
+    @GetMapping("/test")
+    public void test() {
+        System.out.println("이벤트 테스트");
+        simpleSourceBean.publishFcmMessage();
+    }
 
 }

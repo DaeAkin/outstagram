@@ -9,6 +9,8 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -31,7 +33,7 @@ import java.util.List;
 @EnableResourceServer
 
 // 스프링 클라우드 스트림에 애플리케이션을 메세지 브로커로 바인딩하라고 알린다.
-//@EnableBinding(Source.class)
+@EnableBinding(Source.class)
 public class OutstagramFeedServerApplication {
 
     public static void main(String[] args) {
@@ -40,7 +42,6 @@ public class OutstagramFeedServerApplication {
 
     @Bean
     public Sampler defaultSampler() {
-        // return new AlwaysSampler();
         return Sampler.ALWAYS_SAMPLE;
     }
 
