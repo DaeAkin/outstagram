@@ -9,4 +9,5 @@ public interface FollowService {
     void followOrUnFollow(Long followingId, Long followedId);
     List<FollowListResponse> getFollowedList(Long userId);
     List<FollowListResponse> getFollowingList(Long userId);
+    void acceptFollow(Long f_id, Long userId);
 }

@@ -11,6 +11,7 @@ import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.global.client.LoginRestTemplate;
+import outstagram.global.error.NoDataException;
 
 
 import javax.transaction.Transactional;
@@ -32,6 +33,7 @@ public class FollowServiceImpl implements FollowService {
     LoginRestTemplate loginRestTemplate;
 
     @Transactional
+    @Override
     public void followOrUnFollow(Long followingId, Long followedId) {
        Optional.of(isFollowed(followingId,followedId))
                 .map(r -> {
@@ -47,6 +49,7 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Transactional
+    @Override
     public List<FollowListResponse> getFollowedList(Long userId) {
         return followRepository.findAllByFollowedId(userId)
                 .orElseGet(ArrayList::new)
@@ -61,6 +64,7 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Transactional
+    @Override
     public List<FollowListResponse> getFollowingList(Long userId) {
        return followRepository.findAllByFollowingId(userId)
                 .orElseGet(ArrayList::new)
@@ -72,6 +76,21 @@ public class FollowServiceImpl implements FollowService {
                             .build();
                 })
                 .collect(Collectors.toList());
+
+    }
+
+    @Transactional
+    @Override
+    public void acceptFollow(Long f_id, Long userId) {
+        followRepository.findByFollowingIdAndFollowedId(userId,f_id)
+                .ifPresent(f -> {
+                    f.setFollowAccept(true);
+                    followRepository.save(f);
+                });
+
+//        .orElseThrow(NoDataException::new)
+
+        ;
 
     }
 

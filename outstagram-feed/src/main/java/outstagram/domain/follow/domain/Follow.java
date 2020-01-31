@@ -31,7 +31,7 @@ public class Follow extends BaseAuditingEntity {
 
     //그 사람을 팔로우한 사람의 userId
     private Long followedId;
-
+    @Setter
     // boolean -> Boolean 변경 .. 왜 primitive 타입 못쓰지?
     private Boolean followAccept = false;
 
