@@ -1,5 +1,6 @@
 package outstagram.domain.follow.application;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,11 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
-
+@Slf4j
 public class FollowServiceTest extends MockTest {
-
-    @InjectMocks
-    FollowService followService = new FollowServiceImpl();
 
     @Mock
     FollowRepository followRepository;
@@ -32,6 +30,9 @@ public class FollowServiceTest extends MockTest {
 
     @Mock
     LoginRestTemplate loginRestTemplate;
+
+    @InjectMocks
+    FollowServiceImpl followService;
 
 
     private final long followingId = 5;
@@ -69,6 +70,25 @@ public class FollowServiceTest extends MockTest {
         assertThat(followedList).isNotEmpty();
         assertThat(followedList.size()).isEqualTo(3);
 
+    }
+
+    @Test
+    public void 팔로우수락_그런데_요청한팔로우가없음_테스트() {
+        //given
+        boolean result = followService.acceptFollow(5L, 3L);
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void 팔로우수락_테스트() {
+        //given
+        given(followRepository.findByFollowingIdAndFollowedId(5L,3L))
+                .willReturn(Optional.of(new Follow(5L,3L)));
+
+        boolean result = followService.acceptFollow(5L, 3L);
+
+        assertThat(result).isTrue();
     }
 
     private List<Follow> followedList(long followedId) {

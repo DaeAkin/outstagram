@@ -3,6 +3,7 @@ package outstagram.domain.follow.application;
 import com.netflix.discovery.converters.Auto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class FollowServiceImpl implements FollowService {
 
-    @Autowired
-    private FollowRepository followRepository;
-    @Autowired
-    LoginRestTemplate loginRestTemplate;
+    private final FollowRepository followRepository;
+    private final LoginRestTemplate loginRestTemplate;
 
     @Transactional
     @Override
@@ -81,17 +79,17 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional
     @Override
-    public void acceptFollow(Long f_id, Long userId) {
-        followRepository.findByFollowingIdAndFollowedId(userId,f_id)
-                .ifPresent(f -> {
-                    f.setFollowAccept(true);
-                    followRepository.save(f);
-                });
+    public boolean acceptFollow(Long userId,Long f_id) {
 
-//        .orElseThrow(NoDataException::new)
 
-        ;
-
+      return  followRepository.findByFollowingIdAndFollowedId(userId,f_id)
+                .map( f -> {
+                        f.setFollowAccept(true);
+                        followRepository.save(f);
+                        return true;
+                    })
+              .orElse(false);
+      //orElse 동작보단 Throw가 더 어울려보이는듯..
     }
 
 
