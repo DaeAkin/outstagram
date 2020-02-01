@@ -10,6 +10,7 @@ import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.global.client.LoginRestTemplate;
 import outstagram.global.client.dto.User;
+import outstagram.global.exception.NoDataException;
 import outstagram.test.MockTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,12 +73,10 @@ public class FollowServiceTest extends MockTest {
 
     }
 
-    @Test
+    @Test(expected = NoDataException.class)
     public void 팔로우수락_그런데_요청한팔로우가없음_테스트() {
         //given
         boolean result = followService.acceptFollow(5L, 3L);
-
-        assertThat(result).isFalse();
     }
 
     @Test

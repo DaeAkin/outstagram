@@ -1,0 +1,62 @@
+package outstagram.global.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public class NoDataException extends RuntimeException {
+    private Long errorCode;
+    private String errorMessage;
+    private Error[] errors;
+
+    public NoDataException(Long errorCode, String errorMessage, String defaultMessage, String field){
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.errors = new Error[]{new Error(defaultMessage, field)};
+    }
+
+    public NoDataException(Long errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public NoDataException(String errorMessage){
+        this.errorMessage = errorMessage;
+    }
+
+
+    public NoDataException(Error[] errors) {
+        this.errors = errors;
+    }
+
+    public Error[] getErrors() {
+        return errors;
+    }
+
+    public Long getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public static class Error {
+
+        private String defaultMessage;
+        private String field;
+
+        public Error(String defaultMessage, String field) {
+            this.defaultMessage = defaultMessage;
+            this.field = field;
+        }
+
+        public String getDefaultMessage() {
+            return defaultMessage;
+        }
+
+        public String getField() {
+            return field;
+        }
+    }
+}

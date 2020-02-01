@@ -1,25 +1,18 @@
 package outstagram.domain.follow.application;
 
-import com.netflix.discovery.converters.Auto;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import outstagram.domain.follow.dao.FollowRepository;
 import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.global.client.LoginRestTemplate;
-import outstagram.global.error.NoDataException;
-
+import outstagram.global.exception.NoDataException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,8 +81,7 @@ public class FollowServiceImpl implements FollowService {
                         followRepository.save(f);
                         return true;
                     })
-              .orElse(false);
-      //orElse 동작보단 Throw가 더 어울려보이는듯..
+              .orElseThrow(() -> new NoDataException(1004L,"잠시 후 다시 시도해 주세요."));
     }
 
 
