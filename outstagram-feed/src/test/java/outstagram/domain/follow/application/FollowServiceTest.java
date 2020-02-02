@@ -85,7 +85,7 @@ public class FollowServiceTest extends MockTest {
         given(followRepository.findByFollowingIdAndFollowedId(5L,3L))
                 .willReturn(Optional.of(new Follow(5L,3L)));
 
-        boolean result = followService.acceptFollow(5L, 3L);
+        boolean result = followService.acceptFollow(3L, 5L);
 
         assertThat(result).isTrue();
     }

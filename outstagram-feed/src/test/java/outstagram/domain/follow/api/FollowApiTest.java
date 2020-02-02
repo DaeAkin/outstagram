@@ -1,6 +1,7 @@
 package outstagram.domain.follow.api;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,14 @@ import outstagram.domain.follow.domain.Follow;
 import outstagram.domain.follow.dto.FollowListResponse;
 import outstagram.global.client.LoginRestTemplate;
 import outstagram.global.client.dto.User;
+import outstagram.global.exception.NoDataException;
 import outstagram.test.IntegrationTest;
 import outstagram.test_fixture.FollowFixtureGenerator;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 
@@ -35,25 +38,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@Slf4j
 public class FollowApiTest extends IntegrationTest {
 
-
-
     @Autowired
-    private
-    FollowApi followApi;
-
+    private FollowApi followApi;
     @Autowired
     private FollowService followService;
-
     @Autowired
     private FollowRepository followRepository;
-
-
     @MockBean
     Authentication authentication;
-
     @MockBean
     LoginRestTemplate loginRestTemplate;
 
@@ -135,9 +130,29 @@ public class FollowApiTest extends IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().size()).isEqualTo(followedListNum);
 
-
     }
 
+    @Test
+    public void 팔로우_수락_테스트() {
+        //given
+        followRepository.save(new Follow(followingId,followedId));
+        given(authentication.getPrincipal()).willReturn(followedId);
+
+        //when
+        ResponseEntity<Void> response = followApi.acceptFollow(followingId, authentication);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test(expected = NoDataException.class)
+    public void 팔로우_수락_404_테스트() {
+        //given
+        given(authentication.getPrincipal()).willReturn(followedId);
+
+        //when
+        ResponseEntity<Void> response = followApi.acceptFollow(followingId, authentication);
+    }
 
     //setUp
 

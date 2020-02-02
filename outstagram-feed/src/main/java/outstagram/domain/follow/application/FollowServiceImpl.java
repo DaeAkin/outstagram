@@ -73,9 +73,7 @@ public class FollowServiceImpl implements FollowService {
     @Transactional
     @Override
     public boolean acceptFollow(Long userId,Long f_id) {
-
-
-      return  followRepository.findByFollowingIdAndFollowedId(userId,f_id)
+      return  followRepository.findByFollowingIdAndFollowedId(f_id,userId)
                 .map( f -> {
                         f.setFollowAccept(true);
                         followRepository.save(f);

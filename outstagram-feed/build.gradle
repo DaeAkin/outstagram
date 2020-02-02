@@ -105,9 +105,14 @@ dependencies {
 
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
-    compileOnly('org.projectlombok:lombok:1.18.4')
-    testCompileOnly('org.projectlombok:lombok:1.18.4')
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+
+
+    compileOnly "org.projectlombok:lombok:1.18.6"
+    annotationProcessor "org.projectlombok:lombok:1.18.6"
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.6"
+    testCompile "org.projectlombok:lombok:1.18.6"
+    testImplementation "org.projectlombok:lombok:1.18.6"
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'io.projectreactor:reactor-test'

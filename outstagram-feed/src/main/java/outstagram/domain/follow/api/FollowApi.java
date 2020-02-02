@@ -1,31 +1,25 @@
 package outstagram.domain.follow.api;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import outstagram.domain.follow.application.FollowService;
 import outstagram.domain.follow.dto.FollowListResponse;
-import outstagram.global.client.LoginRestTemplate;
 import outstagram.global.event.SimpleSourceBean;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @Slf4j
-/**
- * TODO : 팔로우시 푸시메세지 날리는건 카프카 이용해야할듯.
- */
 @RequestMapping("/follow")
 public class FollowApi {
 
-    @Autowired
-    FollowService followService;
-
-    @Autowired
-    SimpleSourceBean simpleSourceBean;
+    private final FollowService followService;
+    private final SimpleSourceBean simpleSourceBean;
 
     @ResponseStatus(value = HttpStatus.CREATED)
     // follow or unFollow
@@ -49,6 +43,15 @@ public class FollowApi {
         Long id = Long.parseLong(authentication.getPrincipal().toString());
         return new ResponseEntity<>(followService.getFollowingList(id),HttpStatus.OK);
     }
+
+    @PatchMapping("/accept/{following_id}")
+    public ResponseEntity<Void> acceptFollow(@PathVariable("following_id") Long following_id, Authentication authentication) {
+        Long id = Long.parseLong(authentication.getPrincipal().toString());
+        followService.acceptFollow(id,following_id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/test")
     public void test() {
