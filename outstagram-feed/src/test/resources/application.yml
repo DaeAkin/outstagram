@@ -1,3 +1,4 @@
+resource-path: ${user.home}${file.separator}outstagram-resource-test${file.separator}
 spring:
   profiles: test
   datasource:
