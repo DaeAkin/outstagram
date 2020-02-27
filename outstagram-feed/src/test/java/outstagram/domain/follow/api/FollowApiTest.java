@@ -158,12 +158,12 @@ public class FollowApiTest extends IntegrationTest {
 
     //requests~
 //https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/
-    private ResultActions follow(Long followedId) throws Exception {
-        return mvc.perform(get("/follow/"+followedId)
-                .contentType(MediaType.APPLICATION_JSON).with(user("donghyeon").roles("web"))
-                 )       .andDo(print());
-
-    }
+//    private ResultActions follow(Long followedId) throws Exception {
+//        return mvc.perform(get("/follow/"+followedId)
+//                .contentType(MediaType.APPLICATION_JSON).with(user("donghyeon").roles("web"))
+//                 )       .andDo(print());
+//
+//    }
 
 //    private EntityExchangeResult unFollow(Long followingId, Long followedId) {
 //        Follow alreadyFollow = new Follow(followingId, followedId);

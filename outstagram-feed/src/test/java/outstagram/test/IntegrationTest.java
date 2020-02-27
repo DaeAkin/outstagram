@@ -24,22 +24,22 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@AutoConfigureMockMvc
+//@AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles(TestProfile.TEST)
 @Ignore
 public class IntegrationTest {
-    @Autowired private WebApplicationContext context;
-    protected MockMvc mvc;
-    @Autowired protected ObjectMapper objectMapper;
-
-    @Before
-    public void setUp() {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-    }
+//    @Autowired private WebApplicationContext context;
+//    protected MockMvc mvc;
+//    @Autowired protected ObjectMapper objectMapper;
+//
+//    @Before
+//    public void setUp() {
+//        mvc = MockMvcBuilders
+//                .webAppContextSetup(context)
+//                .apply(springSecurity())
+//                .build();
+//    }
 
 
 }

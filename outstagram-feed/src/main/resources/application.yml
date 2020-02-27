@@ -1,5 +1,6 @@
 #feed 모듈 application.yml
 ---
+resource-path: ${user.home}${file.separator}outstagram{file.separator}
 ribbon:
   eureka:
     enabled: true
