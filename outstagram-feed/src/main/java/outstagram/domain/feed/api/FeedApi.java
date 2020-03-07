@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,7 @@ public class FeedApi {
 
     @GetMapping("/test")
     public void test(Authentication authentication) {
+
         Object principal = authentication.getPrincipal();
         System.out.println(principal);
 
