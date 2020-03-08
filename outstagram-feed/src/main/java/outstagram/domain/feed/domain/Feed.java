@@ -30,16 +30,33 @@ public class Feed {
 
     public void analysisContentByHashTags(RestTemplate restTemplate,String content) {
         log.info("-- 분석 서버 실행 --");
-        List<String> hashTags = new LinkedList<>();
+        System.out.println(getHashTags(content));
 
     }
 
-    private List<String> getHashTags(String content) {
+    public List<String> getHashTags(String content) {
         List<String> hashTags = new LinkedList<>();
-        int position = content.indexOf('#');
-//        while(true) {
-//
-//        }
+        StringBuffer sb = new StringBuffer(content);
+        while(true) {
+            int position = sb.indexOf("#");
+            int lastPosition = position;
+            while(true) {
+                lastPosition++;
+                if(sb.length() <=lastPosition)
+                    break;
+                 if(sb.charAt(lastPosition) == '#' || sb.charAt(lastPosition) == ' ') {
+                     break;
+                 }
+            }
+            if(position == -1)
+                break;
+            else {
+                String target = sb.substring(position,lastPosition);
+                hashTags.add(target);
+                sb.replace(position,lastPosition,"");
+            }
+        }
+        return hashTags;
     }
 
 }

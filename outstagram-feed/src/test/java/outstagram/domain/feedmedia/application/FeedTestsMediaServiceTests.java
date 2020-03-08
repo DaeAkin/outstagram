@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-public class FeedMediaServiceTests extends MockTest {
+public class FeedTestsMediaServiceTests extends MockTest {
     @Mock
     Authentication authentication;
 

@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @Slf4j
-public class FeedApi extends IntegrationTest {
+public class FeedTestsApi extends IntegrationTest {
 //
 //    @Autowired
 //    TestRestTemplate testRestTemplate;
