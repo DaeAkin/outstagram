@@ -35,7 +35,7 @@ public class FeedApi {
 
     @GetMapping("/test")
     public void test(Authentication authentication) {
-
+        System.out.println("auth : ? " + authentication);
         Object principal = authentication.getPrincipal();
         System.out.println(principal);
 

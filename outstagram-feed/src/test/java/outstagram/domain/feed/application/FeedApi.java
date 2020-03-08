@@ -2,6 +2,7 @@ package outstagram.domain.feed.application;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,8 +29,8 @@ public class FeedApi extends IntegrationTest {
 //    @Autowired
 //    TestRestTemplate testRestTemplate;
 
-//    @MockBean
-//    Authentication authentication;
+    @Mock
+    Authentication authentication;
 
     //https://www.baeldung.com/introduction-to-wiremock
     //http://wiremock.org/docs/stubbing//
@@ -38,9 +39,9 @@ public class FeedApi extends IntegrationTest {
 
 
     @Test
-    @WithMockUser(username = "mobileclient", password = "pwd", roles = "USER")
     public void test() throws Exception {
-//        given(authentication.getPrincipal()).willReturn(5);
+        when(authentication.getPrincipal()).thenReturn(5);
+        given(authentication.getPrincipal()).willReturn(5);
 
         MvcResult mvcResult = mvc
                 .perform(get("/feed/test"))

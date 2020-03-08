@@ -7,6 +7,7 @@ import outstagram.domain.feedmedia.domain.FeedMedia;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +28,18 @@ public class Feed {
     @OneToMany(mappedBy = "feed")
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
-    public void analysisContent(RestTemplate restTemplate) {
+    public void analysisContentByHashTags(RestTemplate restTemplate,String content) {
         log.info("-- 분석 서버 실행 --");
+        List<String> hashTags = new LinkedList<>();
+
     }
+
+    private List<String> getHashTags(String content) {
+        List<String> hashTags = new LinkedList<>();
+        int position = content.indexOf('#');
+//        while(true) {
+//
+//        }
+    }
+
 }

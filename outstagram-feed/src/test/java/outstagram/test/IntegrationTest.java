@@ -6,11 +6,20 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,11 +33,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
+import outstagram.OutstagramFeedServerApplication;
 import outstagram.config.TestProfile;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import javax.servlet.Filter;
 import javax.transaction.Transactional;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -36,8 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @AutoConfigureMockMvc
 @Transactional
@@ -50,14 +61,27 @@ public class IntegrationTest {
     protected MockMvc mvc;
     @Autowired
     protected ObjectMapper objectMapper;
+    @MockBean
+    OAuth2RestTemplate template;
+    @Autowired
+    private Filter springSecurityFilterChain;
 
     @Before
     public void setUp() {
+        Authentication auth = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+//        HashMap<String, Object> info = new HashMap<>();
+//        info.put("year", Integer.toString(PROCESSING_YEAR));
+//
+//        when(auth.getDetails()).thenReturn(info);
+        when(securityContext.getAuthentication()).thenReturn(auth);
+
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .apply(springSecurity())
+//                .apply(springSecurity())
+                .addFilters(springSecurityFilterChain)
                 .build();
-
 
     }
 

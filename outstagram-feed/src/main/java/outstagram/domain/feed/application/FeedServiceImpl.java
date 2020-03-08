@@ -29,7 +29,7 @@ public class FeedServiceImpl implements FeedService{
     public void saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId) {
         Optional.of(feedRepository.save(feedSaveRequest.toEntity()))
                 .map(f -> {
-                     f.analysisContent(restTemplate);
+                     f.analysisContentByHashTags(restTemplate,feedSaveRequest.getContent());
                      return feedMediaService.saveFeedMedia(mediaFile);
                 });
     }

@@ -35,3 +35,26 @@ p
 ## RestTemplate에 Oauth2 토큰을 함께 보내는 방법
 
 ![](./docs/img/RestTemplate.png)
+
+
+aws personalize dataset
+{
+	"type": "record",
+	"name": "Interactions",
+	"namespace": "com.amazonaws.personalize.schema",
+	"fields": [
+		{
+			"name": "USER_ID",
+			"type": "string"
+		},
+		{
+			"name": "ITEM_ID",
+			"type": "string"
+		},
+		{
+			"name": "TIMESTAMP",
+			"type": "long"
+		}
+	],
+	"version": "1.0"
+}
