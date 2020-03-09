@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import outstagram.domain.feedmedia.dao.FeedMediaRepository;
 import outstagram.global.utils.MediaUtil;
 
 import java.util.List;
@@ -20,11 +21,16 @@ public class FeedMediaServiceImpl implements FeedMediaService {
     @Value("${resource-path}media")
     private String resourcePath;
 
+    private FeedMediaRepository feedMediaRepository;
+
 
     @Override
-    public boolean saveFeedMedia(List<MultipartFile> feedMediaList) {
+    public boolean saveFeedMedia(Long userId,List<MultipartFile> feedMediaList) {
         feedMediaList
-                .forEach(fm -> MediaUtil.saveImageFile(fm,resourcePath,""));
+                .forEach(fm -> {
+                    String imageFile = MediaUtil.saveImageFile(fm, resourcePath, "");
+
+                } );
         return true;
     }
 }

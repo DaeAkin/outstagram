@@ -3,10 +3,12 @@ package outstagram.domain.feedmedia.application;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
+import outstagram.domain.feedmedia.dao.FeedMediaRepository;
 import outstagram.test.MockTest;
 
 import java.io.File;
@@ -18,10 +20,13 @@ public class FeedTestsMediaServiceTests extends MockTest {
     @Mock
     Authentication authentication;
 
+    @Autowired
+    FeedMediaRepository feedMediaRepository;
+
     String resourcePath = System.getProperty("user.home") + File.separator + "outstagram-resource-test" + File.separator;
 
     @InjectMocks
-    FeedMediaServiceImpl feedMediaService = new FeedMediaServiceImpl(resourcePath);
+    FeedMediaServiceImpl feedMediaService = new FeedMediaServiceImpl(resourcePath,feedMediaRepository);
 
     @Test
     public void 여러개의_이미지_넣기_테스트() {
@@ -32,7 +37,7 @@ public class FeedTestsMediaServiceTests extends MockTest {
                 new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes())
         );
 
-        feedMediaService.saveFeedMedia(givenFileList);
+        feedMediaService.saveFeedMedia(5L,givenFileList);
     }
 
     @Test
@@ -44,6 +49,6 @@ public class FeedTestsMediaServiceTests extends MockTest {
                 new MockMultipartFile("file", "test.mov", "MOV", "testImage".getBytes())
         );
 
-        feedMediaService.saveFeedMedia(givenFileList);
+        feedMediaService.saveFeedMedia(5L,givenFileList);
     }
 }

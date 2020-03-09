@@ -19,6 +19,9 @@ public class FeedMedia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Lob
+    private String resourceLocation;
+
     @ManyToOne
     @JoinColumn(name = "feed_id")
     private Feed feed;

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FeedMediaService {
 
-    public boolean saveFeedMedia(List<MultipartFile> feedMediaList);
+    public boolean saveFeedMedia(Long userId,List<MultipartFile> feedMediaList);
 }

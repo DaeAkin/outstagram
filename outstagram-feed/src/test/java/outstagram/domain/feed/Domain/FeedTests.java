@@ -18,8 +18,8 @@ public class FeedTests extends MockTest {
                 "#인스타그램 #맞팔 #헤헤헤 ";
 
         //when
-        Feed feed = new Feed();
-        List<String> hashTags = feed.getHashTags(content);
+        Feed feed = new Feed(content);
+        List<String> hashTags = feed.getHashTags();
         //then
         assertThat(hashTags.containsAll(expectList));
     }

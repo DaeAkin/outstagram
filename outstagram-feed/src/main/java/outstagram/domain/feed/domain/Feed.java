@@ -18,6 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Feed {
+    public Feed(String content) {
+        this.content = content;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +28,19 @@ public class Feed {
 
     private Long userId;
 
+    @Lob
+    private String content;
+
     @OneToMany(mappedBy = "feed")
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
-    public void analysisContentByHashTags(RestTemplate restTemplate,String content) {
+    public void analysisContentByHashTags(RestTemplate restTemplate){
         log.info("-- 분석 서버 실행 --");
-        System.out.println(getHashTags(content));
+        System.out.println(getHashTags());
 
     }
 
-    public List<String> getHashTags(String content) {
+    public List<String> getHashTags() {
         List<String> hashTags = new LinkedList<>();
         StringBuffer sb = new StringBuffer(content);
         while(true) {

@@ -27,10 +27,10 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public void saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId) {
-        Optional.of(feedRepository.save(feedSaveRequest.toEntity()))
+        Optional.of(feedRepository.save(feedSaveRequest.toEntity(userId)))
                 .map(f -> {
-                     f.analysisContentByHashTags(restTemplate,feedSaveRequest.getContent());
-                     return feedMediaService.saveFeedMedia(mediaFile);
+                     f.analysisContentByHashTags(restTemplate);
+                     return feedMediaService.saveFeedMedia(userId,mediaFile);
                 });
     }
 }
