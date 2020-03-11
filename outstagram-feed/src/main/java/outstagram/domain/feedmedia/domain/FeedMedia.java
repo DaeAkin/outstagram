@@ -15,6 +15,10 @@ import javax.persistence.*;
 @Entity
 public class FeedMedia {
 
+    public FeedMedia(String resourceLocation) {
+        this.resourceLocation = resourceLocation;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -25,4 +29,10 @@ public class FeedMedia {
     @ManyToOne
     @JoinColumn(name = "feed_id")
     private Feed feed;
+
+    public void setFeed(Feed feed) {
+        this.feed = feed;
+        feed.getFeedMediaList().add(this);
+    }
+
 }

@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import outstagram.domain.feed.application.FeedService;
 import outstagram.domain.feed.dto.FeedSaveRequest;
-import outstagram.domain.feedmedia.application.FeedMediaService;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @RestController

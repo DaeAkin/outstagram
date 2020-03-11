@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feedmedia.domain.FeedMedia;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,7 +20,8 @@ public class FeedSaveRequest {
     public Feed toEntity(Long userId) {
         return Feed.builder()
                 .content(content)
-                .id(userId)
+                .userId(userId)
+                .feedMediaList(new ArrayList<>())
                 .build();
     }
 

@@ -34,7 +34,7 @@ public class Feed {
     @OneToMany(mappedBy = "feed")
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
-    public void analysisContentByHashTags(RestTemplate restTemplate){
+    public void analysisContentByHashTags(RestTemplate restTemplate) {
         log.info("-- 분석 서버 실행 --");
         System.out.println(getHashTags());
 
@@ -43,26 +43,35 @@ public class Feed {
     public List<String> getHashTags() {
         List<String> hashTags = new LinkedList<>();
         StringBuffer sb = new StringBuffer(content);
-        while(true) {
+        while (true) {
             int position = sb.indexOf("#");
             int lastPosition = position;
-            while(true) {
+            while (true) {
                 lastPosition++;
-                if(sb.length() <=lastPosition)
+                if (sb.length() <= lastPosition)
                     break;
-                 if(sb.charAt(lastPosition) == '#' || sb.charAt(lastPosition) == ' ') {
-                     break;
-                 }
+                if (sb.charAt(lastPosition) == '#' || sb.charAt(lastPosition) == ' ') {
+                    break;
+                }
             }
-            if(position == -1)
+            if (position == -1)
                 break;
             else {
-                String target = sb.substring(position,lastPosition);
+                String target = sb.substring(position, lastPosition);
                 hashTags.add(target);
-                sb.replace(position,lastPosition,"");
+                sb.replace(position, lastPosition, "");
+
             }
         }
         return hashTags;
     }
+
+    public FeedMedia toFeedMedia(String resourcePath) {
+        return FeedMedia.builder()
+                .feed(this)
+                .resourceLocation(resourcePath)
+                .build();
+    }
+
 
 }

@@ -1,4 +1,4 @@
-resource-path: ${user.home}${file.separator}outstagram-resource-test${file.separator}
+
 spring:
   profiles: test
   datasource:
@@ -6,7 +6,7 @@ spring:
     url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
     username: testAdmin
     password: testPassword
-
+resource-path: ${user.home}${file.separator}outstagram-resource-test${file.separator}
 signing :
   #sha256(outstagram)
   key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
