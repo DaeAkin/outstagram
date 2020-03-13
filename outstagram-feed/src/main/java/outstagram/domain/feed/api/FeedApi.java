@@ -24,8 +24,10 @@ public class FeedApi {
 
     //내 feed 보기..
 
-    //feed 작성하기.. (해시태그 분석기능?)
-    @PostMapping("/write")
+    //feed 작성하기
+    //(해시태그 분석기능?)
+    // 사진,영상 화질저하 기능
+    @PostMapping
     public ResponseEntity<Void> saveMyFeed(@Valid FeedSaveRequest feedSaveRequest,
                                            @RequestParam(value = "mediaFile", required = false) List<MultipartFile> mediaFile,
                                            Authentication authentication) {
@@ -33,7 +35,12 @@ public class FeedApi {
         feedService.saveFeed(feedSaveRequest,mediaFile,userId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    //feed 수정하기..
+
+    @DeleteMapping("/{feed_id}")
+    public ResponseEntity<Void> deleteMyFeed(Authentication authentication, @PathVariable String feed_id) {
+        
+    }
+
 
     @GetMapping("/test")
     public void test(Authentication authentication) {

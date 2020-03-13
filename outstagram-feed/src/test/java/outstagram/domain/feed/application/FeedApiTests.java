@@ -32,8 +32,7 @@ public class FeedApiTests extends IntegrationTest {
     FeedApi feedApi;
     @Autowired
     FeedRepository feedRepository;
-    @Autowired
-    FeedMediaRepository feedMediaRepository;
+
     @MockBean
     Authentication authentication;
 

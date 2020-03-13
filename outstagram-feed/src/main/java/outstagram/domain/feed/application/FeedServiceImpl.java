@@ -25,7 +25,7 @@ public class FeedServiceImpl implements FeedService{
 
     private final RestTemplate restTemplate;
     private final FeedRepository feedRepository;
-    private final FeedMediaService feedMediaService;
+
 
 
     @Override
