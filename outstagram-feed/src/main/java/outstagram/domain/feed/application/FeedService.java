@@ -1,12 +1,13 @@
 package outstagram.domain.feed.application;
 
 import org.springframework.web.multipart.MultipartFile;
+import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 
 import java.util.List;
 
 public interface FeedService {
 
-    public void saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId);
+    public Feed saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId);
     public void deleteFeed(Long userId,Long feedId);
 }

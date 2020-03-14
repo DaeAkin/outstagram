@@ -26,6 +26,7 @@ public class Feed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private Long userId;
 
     @Lob

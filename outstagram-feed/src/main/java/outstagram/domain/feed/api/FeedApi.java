@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import outstagram.domain.feed.application.FeedService;
+import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 
 import javax.validation.Valid;
@@ -28,12 +29,12 @@ public class FeedApi {
     //(해시태그 분석기능?)
     // 사진,영상 화질저하 기능
     @PostMapping
-    public ResponseEntity<Void> saveMyFeed(@Valid FeedSaveRequest feedSaveRequest,
+    public ResponseEntity<Feed> saveMyFeed(@Valid FeedSaveRequest feedSaveRequest,
                                            @RequestParam(value = "mediaFile", required = false) List<MultipartFile> mediaFile,
                                            Authentication authentication) {
         Long userId = Long.parseLong(authentication.getPrincipal().toString());
-        feedService.saveFeed(feedSaveRequest,mediaFile,userId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Feed feed = feedService.saveFeed(feedSaveRequest, mediaFile, userId);
+        return new ResponseEntity<>(feed,HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{feed_id}")

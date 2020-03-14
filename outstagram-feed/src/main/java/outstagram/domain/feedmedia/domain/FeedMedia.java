@@ -25,7 +25,7 @@ public class FeedMedia {
     @Lob
     private String resourceLocation;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "feed_id")
     private Feed feed;
 

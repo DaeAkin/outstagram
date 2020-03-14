@@ -15,11 +15,14 @@ import outstagram.domain.feed.dao.FeedRepository;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feedmedia.dao.FeedMediaRepository;
+import outstagram.domain.feedmedia.domain.FeedMedia;
 import outstagram.test.IntegrationTest;
+import outstagram.test_fixture.FeedFixtureGenerator;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -36,14 +39,16 @@ public class FeedApiTests extends IntegrationTest {
     FeedRepository feedRepository;
     @Autowired
     FeedMediaRepository feedMediaRepository;
+    @Autowired
+    FeedService feedService;
 
     @MockBean
     Authentication authentication;
 
+    Long userId = 5L;
     @Test
     public void 피드_작성하기_테스트() {
         //given
-        Long userId = 5L;
         String content = "#인스타 안녕하세요 인스타그램 입니다. 반가워요" +
                 "#인스타그램 #맞팔 #헤헤헤 ";
         List<MultipartFile> givenFileList = Arrays.asList(
@@ -54,24 +59,24 @@ public class FeedApiTests extends IntegrationTest {
         FeedSaveRequest feedSaveRequest = new FeedSaveRequest(content);
         when(authentication.getPrincipal()).thenReturn(userId);
         //when
-        ResponseEntity<Void> response = feedApi.saveMyFeed(feedSaveRequest, givenFileList, authentication);
+        ResponseEntity<Feed> response = feedApi.saveMyFeed(feedSaveRequest, givenFileList, authentication);
         //then
         Feed feed = feedRepository.findFeedByUserId(userId).get();
-        assertThat(feedMediaRepository.findAll()).isEqualTo(3);
+        assertThat(((List<FeedMedia>) feedMediaRepository.findAll()).size()).isEqualTo(3);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(feed.getUserId()).isEqualTo(userId);
-        assertThat(feed.getFeedMediaList().get(0).getResourceLocation()).isNotBlank();
+        assertThat(Objects.requireNonNull(response.getBody()).getUserId()).isEqualTo(userId);
+        assertThat(response.getBody().getFeedMediaList().get(0).getResourceLocation()).isNotBlank();
     }
 
     @Test
     public void 피드_삭제하기_테스트() {
         //given
-
+        Feed feed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
         //when
-
+        when(authentication.getPrincipal()).thenReturn(userId);
+        feedApi.deleteMyFeed(authentication,feed.getId());
         //then
+        assertThat(feedRepository.findById(feed.getId())).isEmpty();
+        assertThat(feedMediaRepository.findAll()).isEmpty();
     }
-
-
-
 }

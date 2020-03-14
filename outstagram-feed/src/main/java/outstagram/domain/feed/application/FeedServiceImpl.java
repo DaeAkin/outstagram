@@ -30,15 +30,15 @@ public class FeedServiceImpl implements FeedService{
 
 
     @Override
-    public void saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId) {
+    public Feed saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId) {
         Objects.requireNonNull(mediaFile);
 
-        Optional.of(feedRepository.save(feedSaveRequest.toEntity(userId)))
+        return Optional.of(feedRepository.save(feedSaveRequest.toEntity(userId)))
                 .map(f -> {
                      f.analysisContentByHashTags(restTemplate);
                     saveFeedMedia(mediaFile, f);
-                    return null;
-                });
+                    return f;
+                }).get();
     }
 
     private void saveFeedMedia(List<MultipartFile> mediaFile, Feed feed) {

@@ -1,6 +1,7 @@
 package outstagram.domain.feed.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Slf4j
 @AllArgsConstructor
+@Builder
 public class FeedSaveRequest {
     String content;
 
