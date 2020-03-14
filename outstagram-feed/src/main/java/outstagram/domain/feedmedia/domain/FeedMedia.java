@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Slf4j
 @Builder
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -26,7 +25,7 @@ public class FeedMedia {
     @Lob
     private String resourceLocation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
@@ -35,4 +34,12 @@ public class FeedMedia {
         feed.getFeedMediaList().add(this);
     }
 
+    @Override
+    public String toString() {
+        return "FeedMedia{" +
+                "id=" + id +
+                ", resourceLocation='" + resourceLocation + '\'' +
+                ", feed_id=" + feed.getId() +
+                '}';
+    }
 }

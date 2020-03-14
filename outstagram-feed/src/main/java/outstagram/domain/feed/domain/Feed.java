@@ -29,10 +29,15 @@ public class Feed {
     private Long userId;
 
     @Lob
+    @Setter
     private String content;
 
-    @OneToMany(mappedBy = "feed")
+    @OneToMany(mappedBy = "feed",cascade = CascadeType.ALL)
     private List<FeedMedia> feedMediaList = new ArrayList<>();
+
+    public boolean isOwner(Long userId) {
+        return userId.equals(this.userId);
+    }
 
     public void analysisContentByHashTags(RestTemplate restTemplate) {
         log.info("-- 분석 서버 실행 --");

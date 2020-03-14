@@ -8,4 +8,5 @@ import java.util.List;
 public interface FeedService {
 
     public void saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId);
+    public void deleteFeed(Long userId,Long feedId);
 }

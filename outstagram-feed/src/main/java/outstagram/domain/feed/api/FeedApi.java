@@ -37,8 +37,10 @@ public class FeedApi {
     }
 
     @DeleteMapping("/{feed_id}")
-    public ResponseEntity<Void> deleteMyFeed(Authentication authentication, @PathVariable String feed_id) {
-        
+    public ResponseEntity<Void> deleteMyFeed(Authentication authentication, @PathVariable Long feed_id) {
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        feedService.deleteFeed(userId,feed_id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

@@ -14,6 +14,7 @@ import outstagram.global.utils.MediaUtil;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,21 +31,38 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public void saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId) {
+        Objects.requireNonNull(mediaFile);
+
         Optional.of(feedRepository.save(feedSaveRequest.toEntity(userId)))
                 .map(f -> {
                      f.analysisContentByHashTags(restTemplate);
-                     saveFeedMedia(mediaFile,f);
-                     return null;
+                    saveFeedMedia(mediaFile, f);
+                    return null;
                 });
     }
 
     private void saveFeedMedia(List<MultipartFile> mediaFile, Feed feed) {
         mediaFile
                 .forEach(fm ->{
+                    log.info("save Feed Media");
                     String path = MediaUtil.saveImageFile(fm, resourcePath, "");
                     FeedMedia feedMedia = new FeedMedia(path);
                     feedMedia.setFeed(feed);
                 });
 
     }
+    @Override
+    public void deleteFeed(Long userId, Long feedId) {
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        if(!optionalFeed.isPresent()) {
+            //do Something...
+            throw new RuntimeException();
+        }
+        if (!optionalFeed.get().isOwner(userId)) {
+            //do Something..
+            throw new RuntimeException();
+        }
+        feedRepository.delete(optionalFeed.get());
+    }
+
 }

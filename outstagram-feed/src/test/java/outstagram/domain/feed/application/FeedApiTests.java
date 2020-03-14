@@ -14,8 +14,10 @@ import outstagram.domain.feed.api.FeedApi;
 import outstagram.domain.feed.dao.FeedRepository;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
+import outstagram.domain.feedmedia.dao.FeedMediaRepository;
 import outstagram.test.IntegrationTest;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class FeedApiTests extends IntegrationTest {
     FeedApi feedApi;
     @Autowired
     FeedRepository feedRepository;
+    @Autowired
+    FeedMediaRepository feedMediaRepository;
 
     @MockBean
     Authentication authentication;
@@ -53,11 +57,19 @@ public class FeedApiTests extends IntegrationTest {
         ResponseEntity<Void> response = feedApi.saveMyFeed(feedSaveRequest, givenFileList, authentication);
         //then
         Feed feed = feedRepository.findFeedByUserId(userId).get();
+        assertThat(feedMediaRepository.findAll()).isEqualTo(3);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(feed.getFeedMediaList().size()).isEqualTo(3);
         assertThat(feed.getUserId()).isEqualTo(userId);
         assertThat(feed.getFeedMediaList().get(0).getResourceLocation()).isNotBlank();
+    }
 
+    @Test
+    public void 피드_삭제하기_테스트() {
+        //given
+
+        //when
+
+        //then
     }
 
 
