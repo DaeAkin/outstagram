@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import outstagram.domain.feed.application.FeedService;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
+import outstagram.domain.feed.dto.FeedUpdateRequest;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -35,6 +36,14 @@ public class FeedApi {
         Long userId = Long.parseLong(authentication.getPrincipal().toString());
         Feed feed = feedService.saveFeed(feedSaveRequest, mediaFile, userId);
         return new ResponseEntity<>(feed,HttpStatus.CREATED);
+    }
+
+    //수정은 content만 가능
+    @PatchMapping
+    public ResponseEntity<Feed> updateMyFeed(@Valid FeedUpdateRequest feedUpdateRequest , Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        Feed feed = feedService.updateFeed(feedUpdateRequest, userId);
+        return new ResponseEntity<>(feed,HttpStatus.OK);
     }
 
     @DeleteMapping("/{feed_id}")

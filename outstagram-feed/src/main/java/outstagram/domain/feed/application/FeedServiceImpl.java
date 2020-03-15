@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import outstagram.domain.feed.dao.FeedRepository;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
+import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.domain.FeedMedia;
 import outstagram.global.utils.MediaUtil;
 
@@ -39,6 +40,17 @@ public class FeedServiceImpl implements FeedService{
                     saveFeedMedia(mediaFile, f);
                     return f;
                 }).get();
+    }
+
+    @Override
+    public Feed updateFeed(FeedUpdateRequest feedUpdateRequest, Long userId) {
+        Optional<Feed> optionalFeed = feedRepository.findById(feedUpdateRequest.getFeedId());
+        if(!optionalFeed.isPresent())
+            throw new RuntimeException();
+
+        Feed feed = optionalFeed.get();
+        feed.updateFeed(feedUpdateRequest);
+        return feed;
     }
 
     private void saveFeedMedia(List<MultipartFile> mediaFile, Feed feed) {

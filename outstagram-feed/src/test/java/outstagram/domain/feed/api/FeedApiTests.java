@@ -1,4 +1,4 @@
-package outstagram.domain.feed.application;
+package outstagram.domain.feed.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -11,9 +11,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import outstagram.domain.feed.api.FeedApi;
+import outstagram.domain.feed.application.FeedService;
 import outstagram.domain.feed.dao.FeedRepository;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
+import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.dao.FeedMediaRepository;
 import outstagram.domain.feedmedia.domain.FeedMedia;
 import outstagram.test.IntegrationTest;
@@ -58,6 +60,7 @@ public class FeedApiTests extends IntegrationTest {
         );
         FeedSaveRequest feedSaveRequest = new FeedSaveRequest(content);
         when(authentication.getPrincipal()).thenReturn(userId);
+
         //when
         ResponseEntity<Feed> response = feedApi.saveMyFeed(feedSaveRequest, givenFileList, authentication);
         //then
@@ -72,11 +75,47 @@ public class FeedApiTests extends IntegrationTest {
     public void 피드_삭제하기_테스트() {
         //given
         Feed feed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
-        //when
         when(authentication.getPrincipal()).thenReturn(userId);
+        //when
         feedApi.deleteMyFeed(authentication,feed.getId());
         //then
         assertThat(feedRepository.findById(feed.getId())).isEmpty();
         assertThat(feedMediaRepository.findAll()).isEmpty();
     }
+
+    @Test
+    public void 피드_업데이트하기_테스트() {
+        //given
+        String updateContent = "수정 #인스타 #수정";
+        Feed feed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
+        when(authentication.getPrincipal()).thenReturn(userId);
+        FeedUpdateRequest feedUpdateRequest = FeedUpdateRequest.builder()
+                .feedId(feed.getId())
+                .content(updateContent)
+                .build();
+        //when
+        ResponseEntity<Feed> response = feedApi.updateMyFeed(feedUpdateRequest, authentication);
+        //then
+        assertThat(Objects.requireNonNull(response.getBody()).getContent()).isEqualTo(updateContent);
+        assertThat(response.getBody().getFeedMediaList()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(feed.getId());
+    }
+
+//    @Test(expected = )
+//    public void 피드_업데이트하려는데_데이터가_없음_테스트() {
+//        //given
+//        String updateContent = "수정 #인스타 #수정";
+//        Feed feed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
+//        when(authentication.getPrincipal()).thenReturn(userId);
+//        FeedUpdateRequest feedUpdateRequest = FeedUpdateRequest.builder()
+//                .feedId(feed.getId())
+//                .content(updateContent)
+//                .build();
+//        //when
+//        ResponseEntity<Feed> response = feedApi.updateMyFeed(feedUpdateRequest, authentication);
+//        //then
+//        assertThat(Objects.requireNonNull(response.getBody()).getContent()).isEqualTo(updateContent);
+//        assertThat(response.getBody().getFeedMediaList()).isNotNull();
+//        assertThat(response.getBody().getId()).isEqualTo(feed.getId());
+//    }
 }

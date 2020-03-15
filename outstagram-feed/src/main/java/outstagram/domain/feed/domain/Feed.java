@@ -3,6 +3,7 @@ package outstagram.domain.feed.domain;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
+import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.domain.FeedMedia;
 
 import javax.persistence.*;
@@ -44,6 +45,10 @@ public class Feed {
         log.info("-- 분석 서버 실행 --");
         System.out.println(getHashTags());
 
+    }
+
+    public void updateFeed(FeedUpdateRequest feedUpdateRequest) {
+        this.content = feedUpdateRequest.getContent();
     }
 
     public List<String> getHashTags() {
