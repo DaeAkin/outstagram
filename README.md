@@ -13,8 +13,6 @@
 - Netflix Zuul(API Gateway)
 - Apache Kafka
 - Reactor3
-p
-
 
 
 
