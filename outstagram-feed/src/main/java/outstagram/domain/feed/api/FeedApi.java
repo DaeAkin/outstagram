@@ -13,6 +13,7 @@ import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -55,11 +56,13 @@ public class FeedApi {
 
 
     @GetMapping("/test")
-    public void test(Authentication authentication) {
-        System.out.println("auth : ? " + authentication);
-        Object principal = authentication.getPrincipal();
+    public String test(Principal principal) {
         System.out.println(principal);
-
+        String aa = principal.getName();
+        System.out.println("----- userId -----");
+        System.out.println("userId : " + aa);
+//        System.out.println("auth : ? " + authentication);
+        return aa;
     }
 
 }

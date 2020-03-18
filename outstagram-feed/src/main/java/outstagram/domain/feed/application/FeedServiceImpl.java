@@ -11,6 +11,7 @@ import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.domain.FeedMedia;
+import outstagram.global.exception.NoDataException;
 import outstagram.global.utils.MediaUtil;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class FeedServiceImpl implements FeedService{
     public Feed updateFeed(FeedUpdateRequest feedUpdateRequest, Long userId) {
         Optional<Feed> optionalFeed = feedRepository.findById(feedUpdateRequest.getFeedId());
         if(!optionalFeed.isPresent())
-            throw new RuntimeException();
+            throw new NoDataException(1004L,"잠시 후 다시 시도해주세요.");
 
         Feed feed = optionalFeed.get();
         feed.updateFeed(feedUpdateRequest);

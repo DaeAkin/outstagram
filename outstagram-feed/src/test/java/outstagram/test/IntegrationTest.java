@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @AutoConfigureMockMvc
 @Transactional
@@ -80,7 +80,7 @@ public class IntegrationTest {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
 //                .apply(springSecurity())
-                .addFilters(springSecurityFilterChain)
+//                .addFilters(springSecurityFilterChain) //제외 필수
                 .build();
 
     }
