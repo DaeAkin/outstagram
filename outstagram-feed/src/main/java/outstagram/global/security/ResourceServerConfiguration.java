@@ -22,20 +22,20 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 //                .anyRequest().access("#oauth2.hasScope('mobileclient')");
 
 
-        if(!activeProfile.equals("test")) {
+//        if(!activeProfile.equals("test")) {
             http
                     .authorizeRequests()
                     .antMatchers(HttpMethod.GET, "/follow/**").permitAll()
                     .anyRequest().access("#oauth2.hasScope('webclient')")
                     .anyRequest().access("#oauth2.hasScope('mobileclient')");
-        } else {
-            http
-                    .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/**").permitAll()
-                    .antMatchers(HttpMethod.POST, "/**").permitAll()
-                    .anyRequest().access("#oauth2.hasScope('webclient')")
-                    .anyRequest().access("#oauth2.hasScope('mobileclient')");
-        }
+//        } else {
+//            http
+//                    .authorizeRequests()
+//                    .antMatchers(HttpMethod.GET, "/**").permitAll()
+//                    .antMatchers(HttpMethod.POST, "/**").permitAll()
+//                    .anyRequest().access("#oauth2.hasScope('webclient')")
+//                    .anyRequest().access("#oauth2.hasScope('mobileclient')");
+//        }
 
 
 

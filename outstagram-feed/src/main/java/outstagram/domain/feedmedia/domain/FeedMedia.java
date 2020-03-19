@@ -1,5 +1,6 @@
 package outstagram.domain.feedmedia.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import outstagram.domain.feed.domain.Feed;
@@ -27,6 +28,7 @@ public class FeedMedia {
 
     @ManyToOne
     @JoinColumn(name = "feed_id")
+    @JsonIgnore
     private Feed feed;
 
     public void setFeed(Feed feed) {

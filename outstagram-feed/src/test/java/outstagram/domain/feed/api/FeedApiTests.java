@@ -1,6 +1,8 @@
 package outstagram.domain.feed.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -10,9 +12,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,11 +38,13 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
@@ -55,41 +62,70 @@ public class FeedApiTests extends IntegrationTest {
     @Autowired
     FeedService feedService;
 
+//    Principal mockPrincipal = Mockito.mock(Principal.class);
+
+
     @MockBean
     Authentication authentication;
 
     Long userId = 5L;
-//    @Test
-//    public void 피드_작성하기_테스트() {
-//        //given
-//        String content = "#인스타 안녕하세요 인스타그램 입니다. 반가워요" +
-//                "#인스타그램 #맞팔 #헤헤헤 ";
-//        List<MultipartFile> givenFileList = Arrays.asList(
-//                new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes()),
-//                new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes()),
-//                new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes())
-//        );
-//        FeedSaveRequest feedSaveRequest = new FeedSaveRequest(content);
-//        when(authentication.getPrincipal()).thenReturn(userId);
-//
-//        //when
-//        ResponseEntity<Feed> response = feedApi.saveMyFeed(feedSaveRequest, givenFileList, authentication);
-//        //then
+
+    @Test
+    public void 피드_작성하기_테스트() throws Exception {
+        //given
+        String content = "#인스타 안녕하세요 인스타그램 입니다. 반가워요" +
+                "#인스타그램 #맞팔 #헤헤헤 ";
+
+        MockMultipartFile file1 = new MockMultipartFile("mediaFile", "test1.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("mediaFile", "test2.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes());
+        MockMultipartFile file3 = new MockMultipartFile("mediaFile", "test3.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes());
+
+        FeedSaveRequest feedSaveRequest = new FeedSaveRequest(content);
+        when(authentication.getPrincipal()).thenReturn(userId);
+
+        //when
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .multipart("/feed")
+                .file(file1)
+                .file(file2)
+                .file(file3)
+                .principal(authentication)
+                .param("content", content)
+                .accept(MediaType.APPLICATION_JSON);
+
+        final ResultActions resultAction = mvc.perform(requestBuilder);
+
+
+        resultAction.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("userId").value(userId))
+                .andExpect(jsonPath("content").value(content))
+                .andExpect(jsonPath("content", Matchers.has).)
+        //then
 //        Feed feed = feedRepository.findFeedByUserId(userId).get();
 //        assertThat(((List<FeedMedia>) feedMediaRepository.findAll()).size()).isEqualTo(3);
 //        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 //        assertThat(Objects.requireNonNull(response.getBody()).getUserId()).isEqualTo(userId);
 //        assertThat(response.getBody().getFeedMediaList().get(0).getResourceLocation()).isNotBlank();
-//    }
+    }
 
     @Test
-    public void 피드_삭제하기_테스트() {
+    public void 피드_삭제하기_테스트() throws Exception {
         //given
         Feed feed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
-        when(authentication.getPrincipal()).thenReturn(userId);
+
+        Mockito.when(authentication.getPrincipal()).thenReturn(String.valueOf(userId));
+
         //when
-        feedApi.deleteMyFeed(authentication,feed.getId());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/feed/" + feed.getId())
+                .principal(authentication)
+                .accept(MediaType.APPLICATION_JSON);
+
+        final ResultActions resultAction = mvc.perform(requestBuilder);
+
         //then
+        resultAction.andExpect(status().isNoContent());
         assertThat(feedRepository.findById(feed.getId())).isEmpty();
         assertThat(feedMediaRepository.findAll()).isEmpty();
     }
@@ -129,15 +165,15 @@ public class FeedApiTests extends IntegrationTest {
     @Test
     public void justTest() throws Exception {
 
-        Principal mockPrincipal = Mockito.mock(Principal.class);
-        Mockito.when(mockPrincipal.getName()).thenReturn("me");
-
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/feed/test")
-                .principal(mockPrincipal)
-                .accept(MediaType.APPLICATION_JSON);
-
-         mvc.perform(requestBuilder).andDo(print());
+//        Principal mockPrincipal = Mockito.mock(Principal.class);
+//        Mockito.when(mockPrincipal.getName()).thenReturn("me");
+//
+//        RequestBuilder requestBuilder = MockMvcRequestBuilders
+//                .get("/feed/test")
+//                .principal(mockPrincipal)
+//                .accept(MediaType.APPLICATION_JSON);
+//
+//         mvc.perform(requestBuilder).andDo(print());
 
 //        MockHttpServletResponse response = result.getResponse();
 //        int status = response.getStatus();
