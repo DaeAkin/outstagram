@@ -44,8 +44,8 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
-    public Feed updateFeed(FeedUpdateRequest feedUpdateRequest, Long userId) {
-        Optional<Feed> optionalFeed = feedRepository.findById(feedUpdateRequest.getFeedId());
+    public Feed updateFeed(FeedUpdateRequest feedUpdateRequest, Long userId,Long feedId) {
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
         if(!optionalFeed.isPresent())
             throw new NoDataException(1004L,"잠시 후 다시 시도해주세요.");
 

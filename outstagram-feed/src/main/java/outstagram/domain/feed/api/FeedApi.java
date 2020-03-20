@@ -40,10 +40,10 @@ public class FeedApi {
     }
 
     //수정은 content만 가능
-    @PatchMapping
-    public ResponseEntity<Feed> updateMyFeed(@Valid FeedUpdateRequest feedUpdateRequest , Authentication authentication) {
+    @PatchMapping("/{feed_id}")
+    public ResponseEntity<Feed> updateMyFeed(@RequestBody @Valid FeedUpdateRequest feedUpdateRequest, Authentication authentication, @PathVariable Long feed_id) {
         Long userId = Long.parseLong(authentication.getPrincipal().toString());
-        Feed feed = feedService.updateFeed(feedUpdateRequest, userId);
+        Feed feed = feedService.updateFeed(feedUpdateRequest, userId,feed_id);
         return new ResponseEntity<>(feed,HttpStatus.OK);
     }
 
