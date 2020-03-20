@@ -39,7 +39,7 @@ public class FeedServiceImpl implements FeedService{
                 .map(f -> {
                      f.analysisContentByHashTags(restTemplate);
                     saveFeedMedia(mediaFile, f);
-                    return f;
+                    return feedRepository.save(f);
                 }).get();
     }
 

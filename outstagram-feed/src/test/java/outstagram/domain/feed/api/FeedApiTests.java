@@ -1,6 +1,7 @@
 package outstagram.domain.feed.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jayway.jsonpath.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -41,6 +42,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -79,8 +81,6 @@ public class FeedApiTests extends IntegrationTest {
         MockMultipartFile file1 = new MockMultipartFile("mediaFile", "test1.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("mediaFile", "test2.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes());
         MockMultipartFile file3 = new MockMultipartFile("mediaFile", "test3.jpg", MediaType.IMAGE_JPEG_VALUE, "testImage".getBytes());
-
-        FeedSaveRequest feedSaveRequest = new FeedSaveRequest(content);
         when(authentication.getPrincipal()).thenReturn(userId);
 
         //when
@@ -95,18 +95,14 @@ public class FeedApiTests extends IntegrationTest {
 
         final ResultActions resultAction = mvc.perform(requestBuilder);
 
-
+        //then
         resultAction.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("userId").value(userId))
                 .andExpect(jsonPath("content").value(content))
-                .andExpect(jsonPath("content", Matchers.has).)
-        //then
-//        Feed feed = feedRepository.findFeedByUserId(userId).get();
-//        assertThat(((List<FeedMedia>) feedMediaRepository.findAll()).size()).isEqualTo(3);
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-//        assertThat(Objects.requireNonNull(response.getBody()).getUserId()).isEqualTo(userId);
-//        assertThat(response.getBody().getFeedMediaList().get(0).getResourceLocation()).isNotBlank();
+                .andExpect(jsonPath("$.feedMediaList",hasSize(3)))
+                .andExpect(jsonPath("$.feedMediaList[*].resourceLocation",notNullValue()))
+                .andExpect(jsonPath("$.hashTags",is(Arrays.asList("#인스타","#인스타그램","#맞팔","#헤헤헤"))));
     }
 
     @Test
