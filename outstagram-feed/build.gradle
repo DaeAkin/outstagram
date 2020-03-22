@@ -132,7 +132,7 @@ dependencies {
     testCompile "com.github.tomakehurst:wiremock-standalone:2.6.0";
 
     //json Matchers
-//    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 
 
 

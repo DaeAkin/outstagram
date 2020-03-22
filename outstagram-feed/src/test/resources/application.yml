@@ -16,7 +16,9 @@ signing :
   key : F79FEA4B2DFB766FE645F05853069FF883271ABD1BCE56C46CEDCA1F9723593C
 
 
-
+server:
+  error:
+    include-stacktrace: always
 
 logging:
   level:

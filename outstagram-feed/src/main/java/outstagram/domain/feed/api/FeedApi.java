@@ -11,6 +11,7 @@ import outstagram.domain.feed.application.FeedService;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
+import outstagram.global.exception.NoDataException;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -23,10 +24,17 @@ import java.util.List;
 public class FeedApi {
 
     private final FeedService feedService;
-    //feed 가져오기..
 
     //내 feed 보기..
 
+    //feed 가져오기..
+    @GetMapping("/{feed_id}")
+    public ResponseEntity<Feed> getFeedByFeedId(@PathVariable String feed_id,Authentication authentication) {
+        //이 친구랑 Follow 됐는지 확인해야함. 안되면 권한없음. 2XX 응답
+
+
+        return null;
+    }
     //feed 작성하기
     //(해시태그 분석기능?)
     // 사진,영상 화질저하 기능
@@ -42,6 +50,7 @@ public class FeedApi {
     //수정은 content만 가능
     @PatchMapping("/{feed_id}")
     public ResponseEntity<Feed> updateMyFeed(@RequestBody @Valid FeedUpdateRequest feedUpdateRequest, Authentication authentication, @PathVariable Long feed_id) {
+        System.out.println("update");
         Long userId = Long.parseLong(authentication.getPrincipal().toString());
         Feed feed = feedService.updateFeed(feedUpdateRequest, userId,feed_id);
         return new ResponseEntity<>(feed,HttpStatus.OK);
@@ -64,5 +73,11 @@ public class FeedApi {
 //        System.out.println("auth : ? " + authentication);
         return aa;
     }
+
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(NoDataException.class)
+//    public NoDataException ExceptionHandle(NoDataException exception) {
+//        return new NoDataException(1004L,"aa");
+//    }
 
 }

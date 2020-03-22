@@ -19,6 +19,8 @@ eureka:
 
 
 server:
+  error:
+    include-stacktrace: never
   port: 15555
 
 signing :
@@ -101,6 +103,8 @@ eureka:
 
 
 server:
+  error:
+    include-stacktrace: never
   port: 15555
 
 signing :
@@ -168,3 +172,4 @@ security:
   oauth2:
     resource:
       userInfoUri: http://localhost:8901/user
+

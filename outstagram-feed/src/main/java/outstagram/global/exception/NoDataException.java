@@ -1,9 +1,10 @@
 package outstagram.global.exception;
 
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.NO_CONTENT)
+@ToString
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NoDataException extends RuntimeException {
     private Long errorCode;
     private String errorMessage;

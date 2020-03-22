@@ -78,4 +78,15 @@ public class FeedServiceImpl implements FeedService{
         feedRepository.delete(optionalFeed.get());
     }
 
+    @Override
+    public Feed getFeedByFeedId(Long userId, Long feedId) {
+        //친구 인지 확인 or 비공개 인지 확인
+
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        if(!optionalFeed.isPresent())
+
+
+        return null;
+    }
+
 }

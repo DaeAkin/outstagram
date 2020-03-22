@@ -48,8 +48,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Slf4j
 public class FeedApiTests extends IntegrationTest {
@@ -138,7 +137,6 @@ public class FeedApiTests extends IntegrationTest {
         FeedUpdateRequest feedUpdateRequest = FeedUpdateRequest.builder()
                 .content(updateContent)
                 .build();
-
         //when
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .patch("/feed/" + feed.getId())
@@ -146,37 +144,53 @@ public class FeedApiTests extends IntegrationTest {
                 .content(objectMapper.writeValueAsString(feedUpdateRequest))
                 .principal(authentication)
                 .accept(APPLICATION_JSON);
-
-
-
         final ResultActions resultAction = mvc.perform(requestBuilder);
-
-        resultAction.andDo(print())
-                .andExpect(status().isOk());
-        ;
-
         //then
-//        assertThat(Objects.requireNonNull(response.getBody()).getContent()).isEqualTo(updateContent);
-//        assertThat(response.getBody().getFeedMediaList()).isNotNull();
-//        assertThat(response.getBody().getId()).isEqualTo(feed.getId());
+        resultAction.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("userId").value(userId))
+                .andExpect(jsonPath("content").value(updateContent))
+                .andExpect(jsonPath("$.feedMediaList", hasSize(3)))
+                .andExpect(jsonPath("$.feedMediaList[*].resourceLocation", notNullValue()))
+                .andExpect(jsonPath("$.hashTags", is(Arrays.asList("#인스타", "#수정"))));
     }
 
-//    @Test(expected = NoDataException.class)
-//    public void 피드_업데이트하려는데_데이터가_없음_테스트() {
-//        //given
-//        String updateContent = "수정 #인스타 #수정";
-//        when(authentication.getPrincipal()).thenReturn(userId);
-//        FeedUpdateRequest feedUpdateRequest = FeedUpdateRequest.builder()
-//                .feedId(3L)
-//                .content(updateContent)
-//                .build();
-//        //when
-//        ResponseEntity<Feed> response = feedApi.updateMyFeed(feedUpdateRequest, authentication);
-//        System.out.println("에러쓰" + response.toString());
-//    }
+    @Test
+    public void 피드_업데이트하려는데_데이터가_없음_테스트() throws Exception {
+        //given
+        String updateContent = "수정 #인스타 #수정";
+        when(authentication.getPrincipal()).thenReturn(userId);
+        FeedUpdateRequest feedUpdateRequest = FeedUpdateRequest.builder()
+                .content(updateContent)
+                .build();
+        //when
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .patch("/feed/" + 10004)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(feedUpdateRequest))
+                .principal(authentication)
+                .accept(APPLICATION_JSON);
+        final ResultActions resultAction = mvc.perform(requestBuilder);
+        //then
+        String json = resultAction.andReturn().getResponse().getContentAsString();
+        System.out.println("json :" + json);
+        resultAction.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errorMessage").value("잠시 후 다시 시도해주세요."));
+
+    }
+
 
     @Test
     public void justTest() throws Exception {
+
+        FeedUpdateRequest feedUpdateRequest = FeedUpdateRequest.builder()
+                .content("인스타")
+                .build();
+
+        NoDataException forEntity = restTemplate.patchForObject("/feed/10004",feedUpdateRequest, NoDataException.class);
+
+        System.out.println(forEntity.toString());
 
 //        Principal mockPrincipal = Mockito.mock(Principal.class);
 //        Mockito.when(mockPrincipal.getName()).thenReturn("me");

@@ -12,4 +12,5 @@ public interface FeedService {
     Feed saveFeed(FeedSaveRequest feedSaveRequest, List<MultipartFile> mediaFile, Long userId);
     Feed updateFeed(FeedUpdateRequest feedUpdateRequest ,Long userId,Long feedId);
     void deleteFeed(Long userId,Long feedId);
+    Feed getFeedByFeedId(Long userId,Long feedId);
 }
