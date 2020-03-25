@@ -25,15 +25,19 @@ public class FeedApi {
 
     private final FeedService feedService;
 
-    //내 feed 보기..
-
+    //계정 눌렀을 때 정보 들어가지는 API
+    @GetMapping("/feed-list/{user_id}")
+    public ResponseEntity getFeedList(@PathVariable Long user_id) {
+        return null;
+    }
     //feed 가져오기..
     @GetMapping("/{feed_id}")
-    public ResponseEntity<Feed> getFeedByFeedId(@PathVariable String feed_id,Authentication authentication) {
+    public ResponseEntity<Feed> getFeedByFeedId(@PathVariable Long feed_id,Authentication authentication) {
         //이 친구랑 Follow 됐는지 확인해야함. 안되면 권한없음. 2XX 응답
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        Feed feed = feedService.getFeedByFeedId(userId, feed_id);
 
-
-        return null;
+        return new ResponseEntity<>(feed,HttpStatus.OK);
     }
     //feed 작성하기
     //(해시태그 분석기능?)
@@ -74,10 +78,6 @@ public class FeedApi {
         return aa;
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(NoDataException.class)
-//    public NoDataException ExceptionHandle(NoDataException exception) {
-//        return new NoDataException(1004L,"aa");
-//    }
+
 
 }

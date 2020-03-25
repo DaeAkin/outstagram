@@ -11,6 +11,7 @@ import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.domain.FeedMedia;
+import outstagram.global.exception.ApiErrorException;
 import outstagram.global.exception.NoDataException;
 import outstagram.global.utils.MediaUtil;
 
@@ -18,6 +19,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static outstagram.global.error.Errors.ThereIsNoData;
 
 @Service
 @Slf4j
@@ -47,8 +50,9 @@ public class FeedServiceImpl implements FeedService{
     public Feed updateFeed(FeedUpdateRequest feedUpdateRequest, Long userId,Long feedId) {
         Optional<Feed> optionalFeed = feedRepository.findById(feedId);
         if(!optionalFeed.isPresent())
-            throw new NoDataException(1004L,"잠시 후 다시 시도해주세요.");
+            throw new ApiErrorException(1004L,"There is no Data feedId = " + feedId , "해당 데이터를 찾을 수 없습니다.") ;
 
+        ThereIsNoData.ge
         Feed feed = optionalFeed.get();
         feed.updateFeed(feedUpdateRequest);
         return feed;
@@ -80,13 +84,17 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public Feed getFeedByFeedId(Long userId, Long feedId) {
-        //친구 인지 확인 or 비공개 인지 확인
-
         Optional<Feed> optionalFeed = feedRepository.findById(feedId);
-        if(!optionalFeed.isPresent())
+        if(!optionalFeed.isPresent()) {
+            //do Something..
+            throw new RuntimeException();
+        }
+        Feed feed = optionalFeed.get();
 
+        //친구 인지 확인 or 비공개 인지 확인
+        feed.isFeedAccessible(restTemplate);
 
-        return null;
+        return feed;
     }
 
 }

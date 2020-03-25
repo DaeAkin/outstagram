@@ -37,6 +37,10 @@ public class Feed {
     @OneToMany(mappedBy = "feed",cascade = CascadeType.ALL)
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
+    public boolean isFeedAccessible(RestTemplate restTemplate) {
+        return true;
+    }
+
     public boolean isOwner(Long userId) {
         return userId.equals(this.userId);
     }

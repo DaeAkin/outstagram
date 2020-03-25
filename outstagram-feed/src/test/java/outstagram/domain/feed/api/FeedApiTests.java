@@ -170,14 +170,37 @@ public class FeedApiTests extends IntegrationTest {
                 .content(objectMapper.writeValueAsString(feedUpdateRequest))
                 .principal(authentication)
                 .accept(APPLICATION_JSON);
-        final ResultActions resultAction = mvc.perform(requestBuilder);
+        final ResultActions resultAction = mvc.perform(requestBuilder).andDo(print());
         //then
         String json = resultAction.andReturn().getResponse().getContentAsString();
         System.out.println("json :" + json);
-        resultAction.andDo(print())
+        resultAction
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errorMessage").value("잠시 후 다시 시도해주세요."));
+                .andExpect(jsonPath("errorCode").value(1004))
+                .andExpect(jsonPath("errorMessage").value("There is no Data feedId = 10004"))
+                .andExpect(jsonPath("details").value("해당 데이터를 찾을 수 없습니다."));
+    }
 
+    @Test
+    public void 피드_한개_가져오기() throws Exception {
+        //given
+        Feed feed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
+        when(authentication.getPrincipal()).thenReturn(userId);
+
+        //when
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/feed/"+feed.getId())
+                .contentType(APPLICATION_JSON_UTF8)
+                .principal(authentication)
+                .accept(APPLICATION_JSON);
+        final ResultActions resultAction = mvc.perform(requestBuilder)
+                .andDo(print());
+        //then
+        resultAction
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("userId").value(userId))
+                .andExpect(jsonPath("$.feedMediaList", hasSize(3)))
+                .andExpect(jsonPath("$.feedMediaList[*].resourceLocation", notNullValue()));
     }
 
 
@@ -188,9 +211,10 @@ public class FeedApiTests extends IntegrationTest {
                 .content("인스타")
                 .build();
 
-        NoDataException forEntity = restTemplate.patchForObject("/feed/10004",feedUpdateRequest, NoDataException.class);
-
-        System.out.println(forEntity.toString());
+//        NoDataException forEntity = restTemplate.patchForObject("/feed/10004",feedUpdateRequest, NoDataException.class);
+//        NoDataException result = restTemplate.patchForObject("/error", feedUpdateRequest,NoDataException.class, );
+//        System.out.println(result.toString());
+//        System.out.println(forEntity.toString());
 
 //        Principal mockPrincipal = Mockito.mock(Principal.class);
 //        Mockito.when(mockPrincipal.getName()).thenReturn("me");
