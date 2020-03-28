@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Errors {
 
-    ThereIsNoData(4004L,"There is no Data with = ","해당 데이터를 찾을 수 없습니다.");
+    ThereIsNoData(4004L,"There is no Data","해당 데이터를 찾을 수 없습니다.");
 
     private Long errorCode;
     private String errorMessage;

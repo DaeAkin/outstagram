@@ -38,7 +38,7 @@ public class Feed {
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
     public boolean isFeedAccessible(RestTemplate restTemplate) {
-        return true;
+        return false;
     }
 
     public boolean isOwner(Long userId) {

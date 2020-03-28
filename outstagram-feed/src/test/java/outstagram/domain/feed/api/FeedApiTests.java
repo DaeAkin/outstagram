@@ -1,60 +1,45 @@
 package outstagram.domain.feed.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.jayway.jsonpath.Configuration;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import outstagram.domain.feed.api.FeedApi;
 import outstagram.domain.feed.application.FeedService;
 import outstagram.domain.feed.dao.FeedRepository;
 import outstagram.domain.feed.domain.Feed;
-import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.dao.FeedMediaRepository;
-import outstagram.domain.feedmedia.domain.FeedMedia;
-import outstagram.global.exception.NoDataException;
 import outstagram.test.IntegrationTest;
 import outstagram.test_fixture.FeedFixtureGenerator;
 
-import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static outstagram.global.error.Errors.ThereIsNoData;
 
 @Slf4j
 public class FeedApiTests extends IntegrationTest {
 
     @Autowired
-    TestRestTemplate restTemplate;
+    RestTemplate restTemplate;
 
     @Autowired
     FeedApi feedApi;
@@ -64,10 +49,6 @@ public class FeedApiTests extends IntegrationTest {
     FeedMediaRepository feedMediaRepository;
     @Autowired
     FeedService feedService;
-
-//    Principal mockPrincipal = Mockito.mock(Principal.class);
-
-
     @MockBean
     Authentication authentication;
 
@@ -176,9 +157,9 @@ public class FeedApiTests extends IntegrationTest {
         System.out.println("json :" + json);
         resultAction
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errorCode").value(1004))
-                .andExpect(jsonPath("errorMessage").value("There is no Data feedId = 10004"))
-                .andExpect(jsonPath("details").value("해당 데이터를 찾을 수 없습니다."));
+                .andExpect(jsonPath("errorCode").value(ThereIsNoData.getErrorCode()))
+                .andExpect(jsonPath("errorMessage").value(ThereIsNoData.getErrorMessage() + "id :" + 10004))
+                .andExpect(jsonPath("details").value(ThereIsNoData.getDetails()));
     }
 
     @Test
@@ -203,6 +184,25 @@ public class FeedApiTests extends IntegrationTest {
                 .andExpect(jsonPath("$.feedMediaList[*].resourceLocation", notNullValue()));
     }
 
+    @Test
+    public void 누군가의_피드를_조회() throws Exception {
+        //given
+        Feed savedFeed = FeedFixtureGenerator.makeOneFeedAndThreeMedia(feedService, userId);
+        Feed mockFeed = mock(Feed.class);
+        FeedRepository mockFeedRepository = mock(FeedRepository.class);
+//        when(mockFeedRepository.findById(savedFeed.getId())).thenReturn(Optional.of(savedFeed));
+        when(mockFeed.isFeedAccessible(restTemplate)).thenReturn(true);
+        when(authentication.getPrincipal()).thenReturn(userId);
+        //when
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/feed/" + savedFeed.getId())
+                .principal(authentication)
+                .accept(APPLICATION_JSON);
+        final ResultActions resultAction = mvc.perform(requestBuilder)
+                .andDo(print());
+        //then
+
+    }
 
     @Test
     public void justTest() throws Exception {

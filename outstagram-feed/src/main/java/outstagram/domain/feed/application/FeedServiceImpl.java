@@ -50,9 +50,8 @@ public class FeedServiceImpl implements FeedService{
     public Feed updateFeed(FeedUpdateRequest feedUpdateRequest, Long userId,Long feedId) {
         Optional<Feed> optionalFeed = feedRepository.findById(feedId);
         if(!optionalFeed.isPresent())
-            throw new ApiErrorException(1004L,"There is no Data feedId = " + feedId , "해당 데이터를 찾을 수 없습니다.") ;
+            throw new ApiErrorException(ThereIsNoData.getErrorCode(),ThereIsNoData.getErrorMessage() + "id :" + feedId , ThereIsNoData.getDetails());
 
-        ThereIsNoData.ge
         Feed feed = optionalFeed.get();
         feed.updateFeed(feedUpdateRequest);
         return feed;
@@ -87,13 +86,14 @@ public class FeedServiceImpl implements FeedService{
         Optional<Feed> optionalFeed = feedRepository.findById(feedId);
         if(!optionalFeed.isPresent()) {
             //do Something..
-            throw new RuntimeException();
+            throw new ApiErrorException(ThereIsNoData.getErrorCode(),ThereIsNoData.getErrorMessage() + "id :" + feedId , ThereIsNoData.getDetails());
         }
         Feed feed = optionalFeed.get();
 
         //친구 인지 확인 or 비공개 인지 확인
-        feed.isFeedAccessible(restTemplate);
-
+        if(!feed.isFeedAccessible(restTemplate)) {
+            throw new ApiErrorException(14L,"asd","asd");
+        }
         return feed;
     }
 
