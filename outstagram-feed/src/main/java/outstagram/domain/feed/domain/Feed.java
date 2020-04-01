@@ -2,9 +2,11 @@ package outstagram.domain.feed.domain;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
 import outstagram.domain.feedmedia.domain.FeedMedia;
+import outstagram.global.client.dto.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class Feed {
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
     public boolean isFeedAccessible(RestTemplate restTemplate) {
+        User user = restTemplate.getForEntity("", User.class).getBody();
+
+        if(user.isPrivateAccount())
         return false;
     }
 

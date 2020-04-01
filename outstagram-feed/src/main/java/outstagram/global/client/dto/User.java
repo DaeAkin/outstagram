@@ -12,6 +12,8 @@ public class User {
 
     private String email;
 
+    private boolean privateAccount;
+
     public User(String email) {
         this.email = email;
     }

@@ -45,6 +45,8 @@ public class User extends BaseAuditingEntity implements UserDetails {
 
     private String fcmToken;
 
+    private boolean privateAccount;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
