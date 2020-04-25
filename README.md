@@ -1,9 +1,13 @@
-## 📖 기술스택 a
+## 아키텍처
+
+![](docs/img/outstargramArchitecture.png)
+
+
+
+## 📖 기술스택 
 
 - SpringBoot
-
 - MicroService Architecture
-
 - Oauth2 cloud
 - JWT
 - Docker
@@ -12,8 +16,11 @@
 - Netflix Hystrix
 - Netflix Zuul(API Gateway)
 - Apache Kafka
-- Reactor3
 
+## Todo
+
+- 피드 비공개 설정 여부
+- 1:1 채팅
 
 ## 🚀 Trouble Shooting
 
@@ -32,7 +39,6 @@
 ## RestTemplate에 Oauth2 토큰을 함께 보내는 방법
 
 ![](./docs/img/RestTemplate.png)
-
 
 aws personalize dataset
 {
