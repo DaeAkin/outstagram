@@ -36,14 +36,12 @@ public class Feed {
     @Setter
     private String content;
 
-    @OneToMany(mappedBy = "feed",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
     private List<FeedMedia> feedMediaList = new ArrayList<>();
 
     public boolean isFeedAccessible(RestTemplate restTemplate) {
         User user = restTemplate.getForEntity("", User.class).getBody();
-
-        if(user.isPrivateAccount())
-        return false;
+        return !user.isPrivateAccount();
     }
 
     public boolean isOwner(Long userId) {

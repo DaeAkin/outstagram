@@ -11,10 +11,12 @@ import outstagram.domain.feed.application.FeedService;
 import outstagram.domain.feed.domain.Feed;
 import outstagram.domain.feed.dto.FeedSaveRequest;
 import outstagram.domain.feed.dto.FeedUpdateRequest;
+import outstagram.domain.feedmedia.domain.FeedMedia;
 import outstagram.global.exception.NoDataException;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -25,12 +27,21 @@ public class FeedApi {
 
     private final FeedService feedService;
 
-    //계정 눌렀을 때 정보 들어가지는 API
+
     @GetMapping("/feed-list/{user_id}")
     public ResponseEntity getFeedList(@PathVariable Long user_id) {
         return null;
     }
-    //feed 가져오기..
+
+    @GetMapping
+    public ResponseEntity<List<Feed>> getFeeds(Authentication authentication) {
+
+        return new ResponseEntity<>(HttpStatus.OK, Arrays.asList(
+                new Feed(1,1L,"인스타 그램",Arrays.asList(new FeedMedia(1,"/mockImage",null))),
+                new Feed(2,1L,"인스타 그램2",Arrays.asList(new FeedMedia(1,"/mockImage",null)))
+        ));
+    }
+
     @GetMapping("/{feed_id}")
     public ResponseEntity<Feed> getFeedByFeedId(@PathVariable Long feed_id,Authentication authentication) {
         //이 친구랑 Follow 됐는지 확인해야함. 안되면 권한없음. 2XX 응답
